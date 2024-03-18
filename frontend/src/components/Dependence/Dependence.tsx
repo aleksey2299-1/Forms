@@ -22,17 +22,18 @@ const Dependence: React.FC<any> = ({ index }) => {
         dependsTypes.includes(question.type)
     )
     .map((item) => ({
-      value: item.name,
+      value: item.id,
+      label: item.name,
     }));
 
   const options = watchQuestions.find(
-    (item) => item.name === dependsValue
+    (item) => item.id === dependsValue
   )?.options;
 
   useEffect(() => {
     if (
       dependsValue !== undefined &&
-      !watchQuestions.some((item) => item.name === dependsValue)
+      !watchQuestions.some((item) => item.id === dependsValue)
     ) {
       setValue(`questions[${index}].depends`, undefined);
       unregister(`questions[${index}].depends`);
@@ -47,7 +48,12 @@ const Dependence: React.FC<any> = ({ index }) => {
             name={`questions[${index}].depends.question`}
             control={control}
             render={({ field }) => (
-              <Select options={questions} style={{ width: 100 }} {...field} />
+              <Select
+                options={questions}
+                allowClear
+                style={{ width: 100 }}
+                {...field}
+              />
             )}
           />
           {dependsValue && (

@@ -4,7 +4,11 @@ import Checkboxes from "../Checkboxes/Checkboxes";
 import MultipleChoice from "../MultipleChoice/MultipleChoice";
 import { Controller, useFormContext } from "react-hook-form";
 
-const QuestionOption: React.FC<any> = ({ currentOption, index }) => {
+const QuestionOption: React.FC<any> = ({
+  currentOption,
+  index,
+  isEditable,
+}) => {
   const { control } = useFormContext();
 
   const option = () => {
@@ -15,7 +19,11 @@ const QuestionOption: React.FC<any> = ({ currentOption, index }) => {
             name={`questions[${index}].answer`}
             control={control}
             render={({ field }) => (
-              <Input placeholder="Short answer" disabled {...field} />
+              <Input
+                placeholder="Short answer"
+                disabled={isEditable}
+                {...field}
+              />
             )}
           />
         );
@@ -28,18 +36,18 @@ const QuestionOption: React.FC<any> = ({ currentOption, index }) => {
               <Input.TextArea
                 placeholder="Long answer"
                 autoSize
-                disabled
+                disabled={isEditable}
                 {...field}
               />
             )}
           />
         );
       case "Multiple choice":
-        return <MultipleChoice index={index} />;
+        return <MultipleChoice index={index} isEditable={isEditable} />;
       case "Checkboxes":
-        return <Checkboxes index={index} />;
+        return <Checkboxes index={index} isEditable={isEditable} />;
       case "Drop-down":
-        return <DropDown index={index} />;
+        return <DropDown index={index} isEditable={isEditable} />;
       case "Date":
         return (
           <Controller
@@ -48,7 +56,7 @@ const QuestionOption: React.FC<any> = ({ currentOption, index }) => {
             render={({ field }) => (
               <DatePicker
                 style={{ display: "flex", width: 150 }}
-                disabled
+                disabled={isEditable}
                 {...field}
               />
             )}
@@ -62,7 +70,7 @@ const QuestionOption: React.FC<any> = ({ currentOption, index }) => {
             render={({ field }) => (
               <TimePicker
                 style={{ display: "flex", width: 150 }}
-                disabled
+                disabled={isEditable}
                 {...field}
               />
             )}

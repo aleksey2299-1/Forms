@@ -15,44 +15,54 @@ const optionsList = [
   { value: "File upload" },
 ];
 
-const Question: React.FC<any> = ({ index, onDelete, onCopy }) => {
+const Question: React.FC<any> = ({ index, onDelete, onCopy, isEditable }) => {
   const { control, watch, unregister } = useFormContext();
   const currentOption = watch(`questions[${index}].type`);
 
   return (
     <>
-      <Dependence index={index} />
+      {isEditable && <Dependence index={index} isEditable={isEditable} />}
       <Flex style={{ marginBottom: 10 }}>
         <Controller
           name={`questions[${index}].name`}
           control={control}
-          render={({ field }) => <Input placeholder="Question" {...field} />}
-        />
-        <Controller
-          name={`questions[${index}].type`}
-          control={control}
           render={({ field }) => (
-            <Select
-              defaultValue={optionsList[0]}
-              options={optionsList}
-              style={{ width: 200 }}
-              {...field}
-              onChange={(value) => {
-                if (!optionsList.slice(2, 5).some((e) => e.value === value)) {
-                  unregister(`questions[${index}].options`);
-                }
-                field.onChange(value);
-              }}
-            />
+            <Input placeholder="Question" {...field} disabled={!isEditable} />
           )}
         />
+        {isEditable && (
+          <Controller
+            name={`questions[${index}].type`}
+            defaultValue={optionsList[0].value}
+            control={control}
+            render={({ field }) => (
+              <Select
+                defaultValue={optionsList[0]}
+                options={optionsList}
+                style={{ width: 200 }}
+                {...field}
+                onChange={(value) => {
+                  if (!optionsList.slice(2, 5).some((e) => e.value === value)) {
+                    unregister(`questions[${index}].options`);
+                  }
+                  field.onChange(value);
+                }}
+              />
+            )}
+          />
+        )}
       </Flex>
       <QuestionOption
         currentOption={currentOption || optionsList[0].value}
         index={index}
+        isEditable={isEditable}
       />
-      <Divider style={{ backgroundColor: "#000000" }} />
-      <QuestionButtons onDelete={onDelete} index={index} onCopy={onCopy} />
+      {isEditable && (
+        <>
+          <Divider style={{ backgroundColor: "#000000" }} />
+          <QuestionButtons onDelete={onDelete} index={index} onCopy={onCopy} />
+        </>
+      )}
     </>
   );
 };
