@@ -2,13 +2,17 @@ import { CloseOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, Select, Tooltip } from "antd";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import styles from "./DropDown.module.scss";
+import { TOption } from "../QuestionOption/types/types";
 
 const DropDown: React.FC<any> = ({ index, isEditable }) => {
-  const { control, watch } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: `questions[${index}].options`,
   });
+
+  const options: TOption[] = watch(`questions[${index}].options`);
 
   useEffect(() => {
     if (isEditable) {
@@ -35,7 +39,12 @@ const DropDown: React.FC<any> = ({ index, isEditable }) => {
                   style={{ marginBottom: 5, paddingLeft: 7 }}
                 >
                   <Flex vertical={false} justify="space-between">
-                    <Input style={{ width: 200 }} {...field} />
+                    <Input
+                      style={{ width: 200 }}
+                      {...field}
+                      variant="borderless"
+                      className={styles.underline}
+                    />
                     {fields.length > 1 && (
                       <Tooltip title="remove" placement="right">
                         <Button
@@ -54,8 +63,10 @@ const DropDown: React.FC<any> = ({ index, isEditable }) => {
           <li style={{ paddingLeft: 7 }}>
             <Input
               placeholder={`Option ${fields.length + 1}`}
-              style={{ width: 200, display: "flex" }}
+              style={{ width: 200, display: "flex", cursor: "text" }}
               onClick={() => append({ option: `Option ${fields.length + 1}` })}
+              variant="borderless"
+              className={styles.underline}
             />
           </li>
         </ol>
@@ -65,12 +76,31 @@ const DropDown: React.FC<any> = ({ index, isEditable }) => {
           control={control}
           render={({ field }) => (
             <Select
-              options={watch(`questions[${index}].options`).map((e) => ({
-                value: e,
+              placeholder="Choose option"
+              options={options.map((e) => ({
+                value: e.option,
                 label: e.option,
               }))}
-              style={{ width: 200 }}
+              style={{ width: 200, display: "flex" }}
+              allowClear
               {...field}
+              onChange={(selectedOption) => {
+                const updatedOptions = options.map((option) => {
+                  if (option.option === selectedOption) {
+                    return {
+                      ...option,
+                      checked: true,
+                    };
+                  } else {
+                    return {
+                      ...option,
+                      checked: false,
+                    };
+                  }
+                });
+                setValue(`questions[${index}].options`, updatedOptions);
+                field.onChange(selectedOption);
+              }}
             />
           )}
         />

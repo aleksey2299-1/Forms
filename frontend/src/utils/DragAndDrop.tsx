@@ -1,7 +1,13 @@
 import { XYCoord, useDrag, useDrop } from "react-dnd";
 import { TDragQuestion, TQuestion } from "../components/Question/types/types";
 
-export default function DragAndDrop(watch, id, index, onMove, ref) {
+export default function DragAndDrop(
+  watch: Function,
+  id: string,
+  index: number,
+  onMove: Function,
+  ref: React.RefObject<HTMLDivElement>
+) {
   const type = "question";
 
   const [{ isDragging }, drag] = useDrag(() => ({

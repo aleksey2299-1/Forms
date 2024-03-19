@@ -3,6 +3,7 @@ import styles from "./Content.module.scss";
 import CardBlock from "../CardBlock/CardBlock";
 import {
   Controller,
+  FieldValues,
   FormProvider,
   useFieldArray,
   useForm,
@@ -11,7 +12,7 @@ import ButtonsBlock from "../ButtonsBlock/ButtonsBlock";
 import { CheckOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
 import axios from "axios";
-import { TForm } from "./types/types";
+import { TQuestion } from "../Question/types/types";
 
 const Content: React.FC<any> = () => {
   const methods = useForm({
@@ -24,6 +25,7 @@ const Content: React.FC<any> = () => {
           required: false,
         },
       ],
+      fields: [{}],
     },
   });
   const { fields, append, remove, insert, move } = useFieldArray({
@@ -31,16 +33,20 @@ const Content: React.FC<any> = () => {
     name: "questions",
   });
 
+  // Нужно для правильного Drag and Drop
   useEffect(() => {
     methods.setValue("fields", fields);
   }, [fields]);
 
-  const onSubmit = (data: TForm) => {
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
     delete data["fields"];
-    data.questions.forEach((e, index) => {
-      if (e.depends) {
+    data.questions.forEach((e: TQuestion, index: number) => {
+      if (e.depends && e.depends.question && e.depends.option) {
         data.questions[index].depends.question =
-          methods.watch("questions").findIndex((elem) => elem.id == e.id) - 1;
+          fields.findIndex((elem) => elem.id === e.depends?.question) - 1;
+      } else {
+        delete data.questions[index]["depends"];
       }
       delete data.questions[index]["id"];
     });

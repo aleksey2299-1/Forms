@@ -1,13 +1,7 @@
+@import "../underline";
+
 .cardBlock {
   width: 70vh;
   border: solid 1px;
   border-radius: 10px;
-}
-
-.underline {
-  margin-bottom: 10px;
-  color: #000000;
-  border-radius: 0;
-  border-bottom: solid 1px;
-  border-bottom-color: #000000;
 }

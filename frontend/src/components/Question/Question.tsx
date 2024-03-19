@@ -3,6 +3,7 @@ import QuestionOption from "../QuestionOption/QuestionOption";
 import QuestionButtons from "../QuestionButtons/QuestionButtons";
 import { Controller, useFormContext } from "react-hook-form";
 import Dependence from "../Dependence/Dependence";
+import styles from "./Question.module.scss";
 
 const optionsList = [
   { value: "Short answer" },
@@ -27,7 +28,13 @@ const Question: React.FC<any> = ({ index, onDelete, onCopy, isEditable }) => {
           name={`questions[${index}].name`}
           control={control}
           render={({ field }) => (
-            <Input placeholder="Question" {...field} disabled={!isEditable} />
+            <Input
+              placeholder="Question"
+              {...field}
+              disabled={!isEditable}
+              className={isEditable && styles.underline}
+              variant="borderless"
+            />
           )}
         />
         {isEditable && (

@@ -3,6 +3,7 @@ import DropDown from "../DropDown/DropDown";
 import Checkboxes from "../Checkboxes/Checkboxes";
 import MultipleChoice from "../MultipleChoice/MultipleChoice";
 import { Controller, useFormContext } from "react-hook-form";
+import styles from "./QuestionOption.module.scss";
 
 const QuestionOption: React.FC<any> = ({
   currentOption,
@@ -23,6 +24,8 @@ const QuestionOption: React.FC<any> = ({
                 placeholder="Short answer"
                 disabled={isEditable}
                 {...field}
+                className={styles.underline}
+                variant="borderless"
               />
             )}
           />
@@ -38,6 +41,8 @@ const QuestionOption: React.FC<any> = ({
                 autoSize
                 disabled={isEditable}
                 {...field}
+                className={styles.underline}
+                variant="borderless"
               />
             )}
           />
