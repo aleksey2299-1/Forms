@@ -23,7 +23,7 @@ const Question: React.FC<any> = ({ index, onDelete, onCopy, isEditable }) => {
   return (
     <>
       {isEditable && <Dependence index={index} isEditable={isEditable} />}
-      <Flex style={{ marginBottom: 10 }}>
+      <Flex style={{ marginBottom: 10, gap: 10 }}>
         <Controller
           name={`questions[${index}].name`}
           control={control}
@@ -66,7 +66,7 @@ const Question: React.FC<any> = ({ index, onDelete, onCopy, isEditable }) => {
       />
       {isEditable && (
         <>
-          <Divider style={{ backgroundColor: "#000000" }} />
+          <Divider style={{ backgroundColor: "#000000" }} dashed />
           <QuestionButtons onDelete={onDelete} index={index} onCopy={onCopy} />
         </>
       )}

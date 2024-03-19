@@ -5,10 +5,11 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework import routers
 
-from forms.views import FormViewSet
+from forms.views import FilledFormViewSet, FormViewSet
 
 router_v1 = routers.DefaultRouter()
 router_v1.register("forms", FormViewSet, basename="forms")
+router_v1.register("filled-forms", FilledFormViewSet, basename="filled_forms")
 
 v1_urlpatterns = [
     path("", include(router_v1.urls)),
@@ -17,9 +18,7 @@ v1_urlpatterns = [
 api_urlpatterns = [
     path("v1/", include(v1_urlpatterns)),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    path(
-        "docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"
-    ),
+    path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
 ]
 
 urlpatterns = [
@@ -28,9 +27,5 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-    )
-    urlpatterns += static(
-        settings.STATIC_URL, document_root=settings.STATIC_ROOT
-    )
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,16 +1,21 @@
-from rest_framework import viewsets, permissions
-from rest_framework.request import Request
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import permissions, viewsets
 
-from forms.models import Form
-from forms.serializers import CreateFormSerializer
+from forms.models import FilledForm, Form
+from forms.serializers import FilledFormSerializer, FormSerializer
 
 
 class FormViewSet(viewsets.ModelViewSet):
     queryset = Form.objects.all()
-    serializer_class = CreateFormSerializer
+    serializer_class = FormSerializer
     permission_classes = (permissions.AllowAny,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ("active",)
     http_method_names = ("get", "post", "patch", "delete")
 
-    def create(self, request: Request, *args, **kwargs):
-        print(request.data)
-        return super().create(request, *args, **kwargs)
+
+class FilledFormViewSet(viewsets.ModelViewSet):
+    queryset = FilledForm.objects.all()
+    serializer_class = FilledFormSerializer
+    permission_classes = (permissions.AllowAny,)
+    http_method_names = ("get", "post", "delete")

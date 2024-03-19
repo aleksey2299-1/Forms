@@ -31,7 +31,12 @@ const Checkboxes: React.FC<any> = ({ index, isEditable }) => {
           render={({ field }) => (
             <Flex justify="space-between" style={{ marginBottom: 5 }}>
               <Flex>
-                <Checkbox disabled={isEditable} {...field}>
+                <Checkbox
+                  disabled={isEditable}
+                  {...field}
+                  value={undefined}
+                  checked={field.value}
+                >
                   <Controller
                     key={item.id}
                     name={`questions[${index}].options[${optionIndex}].option`}
@@ -42,6 +47,7 @@ const Checkboxes: React.FC<any> = ({ index, isEditable }) => {
                         style={{ width: 200 }}
                         {...field}
                         variant="borderless"
+                        disabled={!isEditable}
                         className={styles.underline}
                       />
                     )}

@@ -1,0 +1,14 @@
+[tool.black]
+line-length = 89
+target-version = ['py312']
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "forms_project.settings"
+norecursedirs = "env/* venv/*"
+addopts = [
+    "-vv",
+    "-p",
+    "no:cacheprovider",
+]
+testpaths = "tests/"
+python_files = "test_*.py"

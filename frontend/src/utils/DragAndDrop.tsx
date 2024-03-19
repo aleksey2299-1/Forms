@@ -20,9 +20,6 @@ export default function DragAndDrop(
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    options: {
-      dropEffect: "move",
-    },
   }));
 
   const [, drop] = useDrop(() => ({

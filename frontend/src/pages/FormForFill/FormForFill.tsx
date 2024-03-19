@@ -9,7 +9,7 @@ import {
 import { CheckOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import CardBlock from "../components/CardBlock/CardBlock";
+import CardBlock from "../../components/CardBlock/CardBlock";
 import { TFormFill } from "./types/types";
 
 const FormForFill: React.FC<any> = () => {
@@ -18,11 +18,12 @@ const FormForFill: React.FC<any> = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/v1/forms/10/")
+      .get("http://localhost:8000/api/v1/forms/?active=true")
       .then((response) => {
-        setForm(response.data);
-        Object.keys(response.data).forEach((fieldName) => {
-          methods.setValue(fieldName, response.data[fieldName]);
+        const data = { ...response.data[0] };
+        setForm(data);
+        Object.keys(data).forEach((fieldName) => {
+          methods.setValue(fieldName, data[fieldName]);
         });
       })
       .catch((error) => {
@@ -30,11 +31,13 @@ const FormForFill: React.FC<any> = () => {
       });
   }, [methods, setForm]);
 
+  console.log(form);
+
   const onSubmit = (data: FieldValues) => {
-    data["from_form"] = data["id"];
+    data["parent"] = data["id"];
     console.log(data);
     axios
-      .post("http://localhost:8000/api/v1/forms/", data)
+      .post("http://localhost:8000/api/v1/filled-forms/", data)
       .then((response) => {
         console.log("Успешный ответ от сервера:", response.data);
       })

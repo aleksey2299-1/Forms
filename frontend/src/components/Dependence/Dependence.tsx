@@ -1,4 +1,4 @@
-import { Flex, Select } from "antd";
+import { Divider, Flex, Select, Typography } from "antd";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { TQuestion } from "../Question/types/types";
 import { useEffect } from "react";
@@ -33,43 +33,53 @@ const Dependence: React.FC<any> = ({ index }) => {
   useEffect(() => {
     if (
       dependsValue !== undefined &&
-      !watchQuestions.some((item) => item.id === dependsValue)
+      (!watchQuestions.some((item) => item.id === dependsValue) ||
+        watchQuestions.findIndex((item) => item.id === dependsValue) > index)
     ) {
+      console.log("here");
       setValue(`questions[${index}].depends`, undefined);
       unregister(`questions[${index}].depends`);
     }
-  }, [watchQuestions, unregister]);
+  }, [watchQuestions]);
 
   return (
     <>
       {questions.length > 0 && (
-        <Flex style={{ marginBottom: 10 }}>
-          <Controller
-            name={`questions[${index}].depends.question`}
-            control={control}
-            render={({ field }) => (
-              <Select
-                options={questions}
-                allowClear
-                style={{ width: 100 }}
-                {...field}
-              />
-            )}
-          />
-          {dependsValue && (
+        <>
+          <Typography.Title level={5} style={{ display: "flex" }}>
+            Setup dependence
+          </Typography.Title>
+          <Flex style={{ marginBottom: 10, gap: 10 }}>
             <Controller
-              name={`questions[${index}].depends.option`}
+              name={`questions[${index}].depends.question`}
               control={control}
               render={({ field }) => (
                 <Select
-                  options={options?.map((item) => ({ value: item.option }))}
-                  style={{ width: 100 }}
+                  options={questions}
+                  placeholder="Choose question"
+                  allowClear
+                  style={{ width: 200 }}
                   {...field}
                 />
               )}
             />
-          )}
-        </Flex>
+            {dependsValue && (
+              <Controller
+                name={`questions[${index}].depends.option`}
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    options={options?.map((item) => ({ value: item.option }))}
+                    placeholder="Choose option"
+                    style={{ width: 200 }}
+                    {...field}
+                  />
+                )}
+              />
+            )}
+          </Flex>
+          <Divider style={{ backgroundColor: "#000000" }}></Divider>
+        </>
       )}
     </>
   );

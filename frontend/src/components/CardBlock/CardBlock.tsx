@@ -43,12 +43,14 @@ const CardBlock: React.FC<any> = ({
       const isShow = watch(
         `questions[${questionId}].options[${optionId}].checked`
       );
+      // Обнуляем все выбранные опции и ответы при смене корневой зависимости
       if (!isShow) {
         watch(`questions[${index}].options`)?.forEach(
           (_: any, optIndex: number) => {
             setValue(`questions[${index}].options[${optIndex}].checked`, false);
           }
         );
+        setValue(`questions[${index}].answer`, undefined);
       }
     }
   }, [
@@ -68,11 +70,11 @@ const CardBlock: React.FC<any> = ({
     <>
       {(isEditable ||
         (!isEditable &&
-          depends &&
-          watch(
-            `questions[${dependsOnQuestionId}].options[${dependsOnOptionId}].checked`
-          )) ||
-        (!isEditable && !depends)) && (
+          ((depends &&
+            watch(
+              `questions[${dependsOnQuestionId}].options[${dependsOnOptionId}].checked`
+            )) ||
+            !depends))) && (
         <div
           ref={isEditable ? ref : undefined}
           style={{ paddingTop: 10, paddingBottom: 10 }}

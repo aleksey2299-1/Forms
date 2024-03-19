@@ -1,18 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import FormForFill from "./pages/FormForFill.tsx";
+import FormForFill from "./pages/FormForFill/FormForFill.tsx";
+import EditForm from "./pages/EditForm/EditForm.tsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
+    path: "edit",
+    element: <EditForm />,
     // loader: () => {},
   },
   {
-    path: ":formId",
+    path: "/",
     element: <FormForFill />,
     // loader: () => {},
   },
