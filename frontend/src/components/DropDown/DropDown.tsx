@@ -1,9 +1,10 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, Select, Tooltip } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import styles from "./DropDown.module.scss";
 import { TOption } from "../QuestionOption/types/types";
+import { useLocation } from "react-router-dom";
 
 const DropDown: React.FC<any> = ({ index, isEditable }) => {
   const { control, watch, setValue } = useFormContext();
@@ -11,6 +12,8 @@ const DropDown: React.FC<any> = ({ index, isEditable }) => {
     control,
     name: `questions[${index}].options`,
   });
+  const location = useLocation();
+  const [isFilled, setIsFilled] = useState(false);
 
   const options: TOption[] = watch(`questions[${index}].options`);
 
@@ -23,9 +26,16 @@ const DropDown: React.FC<any> = ({ index, isEditable }) => {
     }
   }, [remove]);
 
+  useEffect(() => {
+    const isFormFilled = location.state?.type === "sub2";
+    if (isFormFilled) {
+      setIsFilled(isFormFilled);
+    }
+  }, [location]);
+
   return (
     <>
-      {isEditable ? (
+      {isEditable && !isFilled ? (
         <ol style={{ marginLeft: 17 }}>
           {fields.map((item, optionIndex) => (
             <Controller

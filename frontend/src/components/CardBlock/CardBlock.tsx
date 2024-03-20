@@ -36,7 +36,7 @@ const CardBlock: React.FC<any> = ({
       setDependsOnQuestionId(questionId);
 
       const optionId = watch(`questions[${questionId}].options`).findIndex(
-        (option: TOptionFromBack) => option.id === depends.option
+        (option: TOptionFromBack) => option.option === depends.option
       );
       setDependsOnOptionId(optionId);
 

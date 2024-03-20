@@ -1,15 +1,18 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Button, Radio, Flex, Input, Tooltip } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import styles from "./MultipleChoice.module.scss";
+import { useLocation } from "react-router-dom";
 
 const MultipleChoice: React.FC<any> = ({ index, isEditable }) => {
   const { control, watch, setValue } = useFormContext();
+  const location = useLocation();
   const { fields, append, remove } = useFieldArray({
     control,
     name: `questions[${index}].options`,
   });
+  const [isFilled, setIsFilled] = useState(false);
 
   useEffect(() => {
     if (isEditable) {
@@ -19,6 +22,15 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable }) => {
       }
     }
   }, [remove]);
+
+  useEffect(() => {
+    const isFormFilled = location.state?.type === "sub2";
+    if (isFormFilled) {
+      const indexToSet = watch(`questions[${index}].answer`);
+      setValue(`questions[${index}].answer`, parseInt(indexToSet));
+      setIsFilled(isFormFilled);
+    }
+  }, [location]);
 
   return (
     <Controller
@@ -63,13 +75,13 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable }) => {
                       style={{ width: 200 }}
                       {...field}
                       className={isEditable && styles.underline}
-                      disabled={!isEditable}
+                      disabled={!isEditable || isFilled}
                       variant="borderless"
                     />
                   )}
                 />
               </Radio>
-              {isEditable && fields.length > 1 && (
+              {isEditable && fields.length > 1 && !isFilled && (
                 <Tooltip title="remove" placement="right">
                   <Button
                     shape="circle"
@@ -81,7 +93,7 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable }) => {
               )}
             </Flex>
           ))}
-          {isEditable && (
+          {isEditable && !isFilled && (
             <Radio
               style={{ display: "flex", marginBottom: 5 }}
               disabled

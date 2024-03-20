@@ -8,15 +8,18 @@ import {
 import { fetchTokenData } from "../../utils/api/AuthApi";
 import { TUser } from "./types/types";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const LoginPage: React.FC<any> = () => {
   const methods = useForm();
   const navigate = useNavigate();
+  const [isIncorrect, setIsIncorrect] = useState(false);
 
   const onSubmit = async (data: FieldValues) => {
-    const response = await fetchTokenData(data as TUser);
-    if (response) {
-      navigate("/edit");
+    const isLogged = await fetchTokenData(data as TUser);
+    setIsIncorrect(!isLogged);
+    if (isLogged) {
+      navigate("edit");
     }
   };
 
@@ -45,6 +48,15 @@ const LoginPage: React.FC<any> = () => {
                 borderColor: "#000000",
               }}
             >
+              {isIncorrect && (
+                <>
+                  <Typography.Text type="danger">
+                    Incorrect username or password
+                  </Typography.Text>
+                  <br />
+                  <br />
+                </>
+              )}
               <Typography.Text>Username:</Typography.Text>
               <br />
               <Controller

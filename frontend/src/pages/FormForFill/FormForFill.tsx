@@ -11,27 +11,52 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CardBlock from "../../components/CardBlock/CardBlock";
 import { TFormFill } from "./types/types";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useLocation } from "react-router-dom";
+import { fetchSingleFilledFormData } from "../../utils/api/FormApi";
 
 const FormForFill: React.FC<any> = () => {
   const methods = useForm();
   const activeForm: TFormFill = useLoaderData() as TFormFill;
   const [form, setForm]: [TFormFill | undefined, Function] = useState();
+  const location = useLocation();
 
   useEffect(() => {
-    Object.keys(activeForm).forEach((fieldName) => {
-      methods.setValue(fieldName, activeForm[fieldName as keyof TFormFill]);
-    });
-    setForm(activeForm);
-  }, [activeForm]);
-
-  console.log(activeForm);
+    const fetchData = async () => {
+      if (location.state.key) {
+        try {
+          if (location.state.type === "sub2") {
+            const fetchedForm = await fetchSingleFilledFormData(
+              location.state.key
+            );
+            if (fetchedForm) {
+              Object.keys(fetchedForm).forEach((fieldName) => {
+                methods.setValue(
+                  fieldName,
+                  fetchedForm[fieldName as keyof TFormFill]
+                );
+              });
+              setForm(fetchedForm);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching form data:", error);
+        }
+      }
+    };
+    if (location.pathname === "/") {
+      Object.keys(activeForm).forEach((fieldName) => {
+        methods.setValue(fieldName, activeForm[fieldName as keyof TFormFill]);
+      });
+      setForm(activeForm);
+    } else if (location.state?.type === "sub2") {
+      fetchData();
+    }
+  }, [activeForm, location]);
 
   const onSubmit = (data: FieldValues) => {
     data["parent"] = data["id"];
-    console.log(data);
     axios
-      .post("http://localhost:8000/api/v1/filled-forms/", data)
+      .post("/api/v1/filled-forms/", data)
       .then((response) => {
         console.log("Успешный ответ от сервера:", response.data);
       })
@@ -61,7 +86,13 @@ const FormForFill: React.FC<any> = () => {
                 render={() => <CardBlock index={index} id={item.id} />}
               />
             ))}
-            <Button htmlType="submit" shape="circle" icon={<CheckOutlined />} />
+            {location?.state?.type !== "sub2" && (
+              <Button
+                htmlType="submit"
+                shape="circle"
+                icon={<CheckOutlined />}
+              />
+            )}
           </form>
         </FormProvider>
       </Layout.Content>

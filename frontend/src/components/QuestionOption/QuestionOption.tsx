@@ -4,6 +4,8 @@ import Checkboxes from "../Checkboxes/Checkboxes";
 import MultipleChoice from "../MultipleChoice/MultipleChoice";
 import { Controller, useFormContext } from "react-hook-form";
 import styles from "./QuestionOption.module.scss";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const QuestionOption: React.FC<any> = ({
   currentOption,
@@ -11,6 +13,13 @@ const QuestionOption: React.FC<any> = ({
   isEditable,
 }) => {
   const { control } = useFormContext();
+  const [isFilled, setIsFilled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const formIsFilled = location.pathname.includes("filled-forms");
+    setIsFilled(formIsFilled);
+  }, [location]);
 
   const option = () => {
     switch (currentOption) {
@@ -22,7 +31,7 @@ const QuestionOption: React.FC<any> = ({
             render={({ field }) => (
               <Input
                 placeholder="Short answer"
-                disabled={isEditable}
+                disabled={isEditable || isFilled}
                 {...field}
                 className={styles.underline}
                 variant="borderless"
@@ -39,7 +48,7 @@ const QuestionOption: React.FC<any> = ({
               <Input.TextArea
                 placeholder="Long answer"
                 autoSize
-                disabled={isEditable}
+                disabled={isEditable || isFilled}
                 {...field}
                 className={styles.underline}
                 variant="borderless"
@@ -48,11 +57,13 @@ const QuestionOption: React.FC<any> = ({
           />
         );
       case "Multiple choice":
-        return <MultipleChoice index={index} isEditable={isEditable} />;
+        return (
+          <MultipleChoice index={index} isEditable={isEditable || isFilled} />
+        );
       case "Checkboxes":
-        return <Checkboxes index={index} isEditable={isEditable} />;
+        return <Checkboxes index={index} isEditable={isEditable || isFilled} />;
       case "Drop-down":
-        return <DropDown index={index} isEditable={isEditable} />;
+        return <DropDown index={index} isEditable={isEditable || isFilled} />;
       case "Date":
         return (
           <Controller
@@ -61,7 +72,7 @@ const QuestionOption: React.FC<any> = ({
             render={({ field }) => (
               <DatePicker
                 style={{ display: "flex", width: 150 }}
-                disabled={isEditable}
+                disabled={isEditable || isFilled}
                 {...field}
               />
             )}
@@ -75,7 +86,7 @@ const QuestionOption: React.FC<any> = ({
             render={({ field }) => (
               <TimePicker
                 style={{ display: "flex", width: 150 }}
-                disabled={isEditable}
+                disabled={isEditable || isFilled}
                 {...field}
               />
             )}

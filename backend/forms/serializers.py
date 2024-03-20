@@ -19,15 +19,37 @@ def deactivate_forms(data):
         prev_active_forms.update(active=False)
 
 
+class GetDependenceSerializer(serializers.ModelSerializer):
+    """Сериализатор зависимости для response."""
+
+    question = serializers.IntegerField(source="option.question.id")
+    option = serializers.CharField(source="option.option")
+
+    class Meta:
+        model = Dependence
+        fields = ("id", "question", "option")
+
+
 class DependenceSerializer(serializers.ModelSerializer):
     """Сериализатор зависимости."""
 
-    question = serializers.IntegerField()
+    question = serializers.IntegerField(source="option.question.id")
     option = serializers.CharField()
 
     class Meta:
         model = Dependence
         fields = ("id", "question", "option")
+
+    def run_validation(self, data=...):
+        print(data)
+        validated_data = super().run_validation(data)
+        print(validated_data)
+        if isinstance(data.get("question"), int):
+            validated_data["question"] = data["question"]
+            return validated_data
+
+    def to_representation(self, instance):
+        return GetDependenceSerializer(instance).data
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -85,6 +107,7 @@ class FormSerializer(serializers.ModelSerializer):
             for question_data in questions_data:
                 options_data = question_data.pop("options", None)
                 depends_data = question_data.pop("depends", None)
+                # print(depends_data)
                 question = Question.objects.create(**question_data, form=form)
                 if depends_data:
                     question_index = depends_data["question"]

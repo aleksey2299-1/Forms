@@ -15,6 +15,9 @@ import { TQuestion } from "../../components/Question/types/types";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import AppModal from "../../utils/AppModal";
+import { useLocation } from "react-router-dom";
+import { fetchSingleEditFormData } from "../../utils/api/FormApi";
+import { TFormFill } from "../../pages/FormForFill/types/types";
 
 const EditForm: React.FC<any> = () => {
   const methods = useForm({
@@ -35,6 +38,8 @@ const EditForm: React.FC<any> = () => {
     name: "questions",
   });
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  // const [form, setForm] = useState()
   const [data, setData]: [FieldValues | undefined, Function] = useState();
 
   // Нужно для правильного Drag and Drop
@@ -42,19 +47,41 @@ const EditForm: React.FC<any> = () => {
     methods.setValue("fields", fields);
   }, [fields]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (location.state?.key) {
+        try {
+          if (location.state.type === "sub1") {
+            const form = await fetchSingleEditFormData(location.state.key);
+            if (form) {
+              Object.keys(form).forEach((fieldName) => {
+                // @ts-ignore
+                methods.setValue(fieldName, form[fieldName as keyof TFormFill]);
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching form data:", error);
+        }
+      } else {
+        methods.reset();
+      }
+    };
+    fetchData();
+  }, [location]);
+
   const onSubmit = (data: FieldValues) => {
-    console.log(data);
-    delete data["fields"];
     // Выставляем индексы для зависимостей, чтобы на бэке не было ошибок
     data.questions.forEach((e: TQuestion, index: number) => {
       if (e.depends && e.depends.question && e.depends.option) {
-        data.questions[index].depends.question =
-          fields.findIndex((elem) => elem.id === e.depends?.question) - 1;
+        data.questions[index].depends.question = data.questions.findIndex(
+          (elem: TQuestion) => elem.id === e.depends?.question
+        );
       } else {
         delete data.questions[index]["depends"];
       }
-      delete data.questions[index]["id"];
     });
+    console.log(data);
     setData(data);
     setOpen(true);
   };

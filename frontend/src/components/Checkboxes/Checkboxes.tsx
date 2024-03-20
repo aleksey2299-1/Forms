@@ -1,8 +1,9 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Flex, Input, Tooltip } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import styles from "./Checkboxes.module.scss";
+import { useLocation } from "react-router-dom";
 
 const Checkboxes: React.FC<any> = ({ index, isEditable }) => {
   const { control, watch } = useFormContext();
@@ -10,6 +11,8 @@ const Checkboxes: React.FC<any> = ({ index, isEditable }) => {
     control,
     name: `questions[${index}].options`,
   });
+  const location = useLocation();
+  const [isFilled, setIsFilled] = useState(false);
 
   useEffect(() => {
     if (isEditable) {
@@ -19,6 +22,13 @@ const Checkboxes: React.FC<any> = ({ index, isEditable }) => {
       }
     }
   }, [remove]);
+
+  useEffect(() => {
+    const isFormFilled = location.state?.type === "sub2";
+    if (isFormFilled) {
+      setIsFilled(isFormFilled);
+    }
+  }, [location]);
 
   return (
     <>
@@ -47,14 +57,14 @@ const Checkboxes: React.FC<any> = ({ index, isEditable }) => {
                         style={{ width: 200 }}
                         {...field}
                         variant="borderless"
-                        disabled={!isEditable}
+                        disabled={!isEditable || isFilled}
                         className={styles.underline}
                       />
                     )}
                   />
                 </Checkbox>
               </Flex>
-              {isEditable && fields.length > 1 && (
+              {isEditable && fields.length > 1 && !isFilled && (
                 <Tooltip title="remove" placement="right">
                   <Button
                     shape="circle"
@@ -68,7 +78,7 @@ const Checkboxes: React.FC<any> = ({ index, isEditable }) => {
           )}
         />
       ))}
-      {isEditable && (
+      {isEditable && !isFilled && (
         <Checkbox style={{ display: "flex", marginBottom: 5 }} disabled>
           <Input
             placeholder={`Option ${fields.length + 1}`}

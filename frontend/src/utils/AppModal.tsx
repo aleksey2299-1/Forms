@@ -11,7 +11,7 @@ const AppModal: React.FC<any> = ({ title, data, isOpen, onClose }) => {
     data["active"] = true;
     console.log(data);
     axios
-      .post("http://localhost:8000/api/v1/forms/", data)
+      .post("/api/v1/forms/", data)
       .then((response) => {
         console.log("Успешный ответ от сервера:", response.data);
       })
@@ -23,7 +23,7 @@ const AppModal: React.FC<any> = ({ title, data, isOpen, onClose }) => {
   const handleNo = () => {
     data["active"] = false;
     axios
-      .post("http://localhost:8000/api/v1/forms/", data)
+      .post("/api/v1/forms/", data)
       .then((response) => {
         console.log("Успешный ответ от сервера:", response.data);
       })

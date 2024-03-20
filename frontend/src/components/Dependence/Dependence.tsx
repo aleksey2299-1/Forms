@@ -36,7 +36,6 @@ const Dependence: React.FC<any> = ({ index }) => {
       (!watchQuestions.some((item) => item.id === dependsValue) ||
         watchQuestions.findIndex((item) => item.id === dependsValue) > index)
     ) {
-      console.log("here");
       setValue(`questions[${index}].depends`, undefined);
       unregister(`questions[${index}].depends`);
     }
