@@ -11,27 +11,21 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CardBlock from "../../components/CardBlock/CardBlock";
 import { TFormFill } from "./types/types";
+import { useLoaderData } from "react-router-dom";
 
 const FormForFill: React.FC<any> = () => {
   const methods = useForm();
+  const activeForm: TFormFill = useLoaderData() as TFormFill;
   const [form, setForm]: [TFormFill | undefined, Function] = useState();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/v1/forms/?active=true")
-      .then((response) => {
-        const data = { ...response.data[0] };
-        setForm(data);
-        Object.keys(data).forEach((fieldName) => {
-          methods.setValue(fieldName, data[fieldName]);
-        });
-      })
-      .catch((error) => {
-        console.error("Ошибка при отправке данных на сервер:", error);
-      });
-  }, [methods, setForm]);
+    Object.keys(activeForm).forEach((fieldName) => {
+      methods.setValue(fieldName, activeForm[fieldName as keyof TFormFill]);
+    });
+    setForm(activeForm);
+  }, [activeForm]);
 
-  console.log(form);
+  console.log(activeForm);
 
   const onSubmit = (data: FieldValues) => {
     data["parent"] = data["id"];

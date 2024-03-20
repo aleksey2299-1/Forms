@@ -4,17 +4,24 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import FormForFill from "./pages/FormForFill/FormForFill.tsx";
 import EditForm from "./pages/EditForm/EditForm.tsx";
+import { fetchActiveFormData } from "./utils/api/FormApi.ts";
+import LoginPage from "./pages/Login/Login.tsx";
+import { getToken } from "./utils/Auth.ts";
 
 const router = createBrowserRouter([
   {
     path: "edit",
     element: <EditForm />,
-    // loader: () => {},
+    loader: getToken,
+  },
+  {
+    path: "login",
+    element: <LoginPage />,
   },
   {
     path: "/",
     element: <FormForFill />,
-    // loader: () => {},
+    loader: fetchActiveFormData,
   },
 ]);
 
