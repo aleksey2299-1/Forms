@@ -1,0 +1,44 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres:16.1-alpine3.19
+    env_file: .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+
+  backend:
+    image: aleksey2299/forms_backend:latest
+    entrypoint: /app/backend_entrypoint.sh
+    env_file: .env
+    volumes:
+      - static:/backend_static
+      - media:/app/media
+    depends_on:
+      - db
+
+  frontend:
+    env_file: .env
+    image: aleksey2299/forms_frontend:latest
+    command: cp -r /app/dist/. /frontend_static/
+    volumes:
+      - static:/frontend_static
+
+  nginx:
+    image: aleksey2299/forms_nginx:latest
+    env_file: .env
+    ports:
+      - 8000:80
+      - 443:443
+    volumes:
+      - static:/static/
+      - media:/media/
+      - certs:/etc/letsencrypt
+
+volumes:
+  postgres_data:
+  static:
+  media:
+  certs:

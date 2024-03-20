@@ -6,7 +6,7 @@ from forms.models import FilledForm, Form
 from forms.serializers import FilledFormSerializer, FormSerializer
 
 
-@extend_schema(tags=["Форма для заполнения"])
+@extend_schema(tags=["Form for fill"])
 class FormViewSet(viewsets.ModelViewSet):
     queryset = Form.objects.all()
     serializer_class = FormSerializer
@@ -16,9 +16,11 @@ class FormViewSet(viewsets.ModelViewSet):
     http_method_names = ("get", "post", "patch", "delete")
 
 
-@extend_schema(tags=["Заполненная форма"])
+@extend_schema(tags=["Filled forms"])
 class FilledFormViewSet(viewsets.ModelViewSet):
     queryset = FilledForm.objects.all()
     serializer_class = FilledFormSerializer
     permission_classes = (permissions.AllowAny,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ("parent",)
     http_method_names = ("get", "post", "delete")
