@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Modal } from "antd";
-import axios from "axios";
+import { postFormForFillData } from "./api/FormApi";
 
 const AppModal: React.FC<any> = ({ title, data, isOpen, onClose }) => {
   useEffect(() => {
@@ -10,26 +10,12 @@ const AppModal: React.FC<any> = ({ title, data, isOpen, onClose }) => {
   const handleYes = () => {
     data["active"] = true;
     console.log(data);
-    axios
-      .post("/api/v1/forms/", data)
-      .then((response) => {
-        console.log("Успешный ответ от сервера:", response.data);
-      })
-      .catch((error) => {
-        console.error("Ошибка при отправке данных на сервер:", error);
-      });
+    postFormForFillData(data);
     onClose(false);
   };
   const handleNo = () => {
     data["active"] = false;
-    axios
-      .post("/api/v1/forms/", data)
-      .then((response) => {
-        console.log("Успешный ответ от сервера:", response.data);
-      })
-      .catch((error) => {
-        console.error("Ошибка при отправке данных на сервер:", error);
-      });
+    postFormForFillData(data);
     onClose(false);
   };
 
