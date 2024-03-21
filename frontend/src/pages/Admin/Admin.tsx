@@ -17,8 +17,6 @@ const Admin: React.FC = () => {
     setIsEditable(!isEditable);
   });
 
-  console.log(localStorage.getItem("token"));
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");

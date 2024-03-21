@@ -19,7 +19,7 @@ const LoginPage: React.FC<any> = () => {
     const isLogged = await fetchTokenData(data as TUser);
     setIsIncorrect(!isLogged);
     if (isLogged) {
-      navigate("edit");
+      navigate("/forms");
     }
   };
 
