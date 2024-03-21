@@ -8,11 +8,13 @@ import {
 } from "react-hook-form";
 import { CheckOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import CardBlock from "../../components/CardBlock/CardBlock";
 import { TFormFill } from "./types/types";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { fetchSingleFilledFormData } from "../../utils/api/FormApi";
+import {
+  fetchSingleFilledFormData,
+  postFilledFormData,
+} from "../../utils/api/FormApi";
 
 const FormForFill: React.FC<any> = () => {
   const methods = useForm();
@@ -55,14 +57,7 @@ const FormForFill: React.FC<any> = () => {
 
   const onSubmit = (data: FieldValues) => {
     data["parent"] = data["id"];
-    axios
-      .post("/api/v1/filled-forms/", data)
-      .then((response) => {
-        console.log("Успешный ответ от сервера:", response.data);
-      })
-      .catch((error) => {
-        console.error("Ошибка при отправке данных на сервер:", error);
-      });
+    postFilledFormData(data);
   };
 
   return (
