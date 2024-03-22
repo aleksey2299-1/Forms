@@ -5,15 +5,15 @@ type TQuestion = {
   depends: TDependence | undefined;
   name: string | undefined;
   type: string;
-  options: TOption[];
+  options: TOption[] | undefined;
   required: boolean;
-  id: string;
+  id: string | number;
 };
 
 type TDragQuestion = {
   item: TQuestion;
   type: string;
-  id: string;
+  id: string | number;
 };
 
 export type { TQuestion, TDragQuestion };

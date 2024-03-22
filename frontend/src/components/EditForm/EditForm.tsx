@@ -1,4 +1,4 @@
-import { Button, Layout } from "antd";
+import { Button, Layout, Spin } from "antd";
 import styles from "./EditForm.module.scss";
 import CardBlock from "../../components/CardBlock/CardBlock";
 import {
@@ -9,29 +9,21 @@ import {
   useForm,
 } from "react-hook-form";
 import ButtonsBlock from "../../components/ButtonsBlock/ButtonsBlock";
-import { CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { TQuestion } from "../../components/Question/types/types";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import AppModal from "../../utils/AppModal";
 import { useLocation } from "react-router-dom";
-import { fetchSingleEditFormData } from "../../utils/api/FormApi";
 import { TFormFill } from "../../pages/FormForFill/types/types";
+import { useAppSelector } from "../../store/hooks";
+import { selectForms } from "../../store/reducers/forms/formsSlice";
 
 const EditForm: React.FC<any> = () => {
+  const { form, forms, isLoading } = useAppSelector(selectForms);
   const methods = useForm({
-    defaultValues: {
-      questions: [
-        {
-          name: undefined,
-          answer: undefined,
-          type: "Short answer",
-          required: false,
-        },
-      ],
-      fields: [{}],
-    },
+    defaultValues: form,
   });
   const { fields, append, remove, insert, move } = useFieldArray({
     control: methods.control,
@@ -39,35 +31,29 @@ const EditForm: React.FC<any> = () => {
   });
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  // const [form, setForm] = useState()
   const [data, setData]: [FieldValues | undefined, Function] = useState();
 
+  // TODO выглядит как костыль, нужно разобраться
   // Нужно для правильного Drag and Drop
   useEffect(() => {
+    // @ts-ignore
     methods.setValue("fields", fields);
   }, [fields]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (location.state?.key) {
-        try {
-          if (location.state.type === "sub1") {
-            const form = await fetchSingleEditFormData(location.state.key);
-            if (form) {
-              Object.keys(form).forEach((fieldName) => {
-                // @ts-ignore
-                methods.setValue(fieldName, form[fieldName as keyof TFormFill]);
-              });
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching form data:", error);
+    if (location.state?.key) {
+      if (location.state.type === "sub1") {
+        const form = forms.find((item) => item.id === location.state.key);
+        if (form) {
+          Object.keys(form).forEach((fieldName) => {
+            // @ts-ignore
+            methods.setValue(fieldName, form[fieldName as keyof TFormFill]);
+          });
         }
-      } else {
-        methods.reset();
       }
-    };
-    fetchData();
+    } else {
+      methods.reset();
+    }
   }, [location]);
 
   const onSubmit = (data: FieldValues) => {
@@ -85,6 +71,27 @@ const EditForm: React.FC<any> = () => {
     setData(data);
     setOpen(true);
   };
+
+  if (isLoading) {
+    return (
+      <Layout.Content
+        className={styles.content}
+        style={{ alignItems: "center" }}
+      >
+        <Spin
+          tip="Loading..."
+          indicator={
+            <LoadingOutlined
+              style={{ fontSize: 40, marginLeft: 7, marginTop: -40 }}
+              spin
+            />
+          }
+        >
+          <div className="content" />
+        </Spin>
+      </Layout.Content>
+    );
+  }
 
   return (
     <DndProvider backend={HTML5Backend}>

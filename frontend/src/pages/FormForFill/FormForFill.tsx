@@ -11,47 +11,31 @@ import { useEffect, useState } from "react";
 import CardBlock from "../../components/CardBlock/CardBlock";
 import { TFormFill } from "./types/types";
 import { useLoaderData, useLocation } from "react-router-dom";
-import {
-  fetchSingleFilledFormData,
-  postFilledFormData,
-} from "../../utils/api/FormApi";
+import { postFilledFormData } from "../../utils/api/FormApi";
+import { useAppSelector } from "../../store/hooks";
+import { selectFilledForms } from "../../store/reducers/filledForms/filledFormsSlice";
 
 const FormForFill: React.FC<any> = () => {
   const methods = useForm();
   const activeForm: TFormFill = useLoaderData() as TFormFill;
   const [form, setForm]: [TFormFill | undefined, Function] = useState();
+  const { forms } = useAppSelector(selectFilledForms);
   const location = useLocation();
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (location.state.key) {
-        try {
-          if (location.state.type === "sub2") {
-            const fetchedForm = await fetchSingleFilledFormData(
-              location.state.key
-            );
-            if (fetchedForm) {
-              Object.keys(fetchedForm).forEach((fieldName) => {
-                methods.setValue(
-                  fieldName,
-                  fetchedForm[fieldName as keyof TFormFill]
-                );
-              });
-              setForm(fetchedForm);
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching form data:", error);
-        }
-      }
-    };
     if (location.pathname === "/") {
       Object.keys(activeForm).forEach((fieldName) => {
         methods.setValue(fieldName, activeForm[fieldName as keyof TFormFill]);
       });
       setForm(activeForm);
     } else if (location.state?.type === "sub2") {
-      fetchData();
+      const filledForm = forms.find((item) => item.id === location.state.key);
+      if (filledForm) {
+        Object.keys(filledForm).forEach((fieldName) => {
+          methods.setValue(fieldName, filledForm[fieldName as keyof TFormFill]);
+        });
+        setForm(filledForm);
+      }
     }
   }, [activeForm, location]);
 
