@@ -118,7 +118,7 @@ sudo docker compose -f docker-compose.production.yml up
 
 Склонируйте репозиторий:
 ````bash
-git@github.com:aleksey2299-1/Forms.git forms
+git clone git@github.com:aleksey2299-1/Forms.git forms
 ````
 
 Перейдите в папку Backend и запустите файл **docker-compose.yml**:
