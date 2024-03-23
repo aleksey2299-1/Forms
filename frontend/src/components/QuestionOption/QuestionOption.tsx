@@ -6,6 +6,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import styles from "./QuestionOption.module.scss";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 const QuestionOption: React.FC<any> = ({
   currentOption,
@@ -74,6 +75,11 @@ const QuestionOption: React.FC<any> = ({
                 style={{ display: "flex", width: 150 }}
                 disabled={isEditable || isFilled}
                 {...field}
+                value={
+                  typeof field.value === "string"
+                    ? dayjs(field.value)
+                    : field.value
+                }
               />
             )}
           />
@@ -88,6 +94,11 @@ const QuestionOption: React.FC<any> = ({
                 style={{ display: "flex", width: 150 }}
                 disabled={isEditable || isFilled}
                 {...field}
+                value={
+                  typeof field.value === "string"
+                    ? dayjs(field.value)
+                    : field.value
+                }
               />
             )}
           />
