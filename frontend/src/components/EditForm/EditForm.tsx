@@ -19,6 +19,7 @@ import { useLocation } from "react-router-dom";
 import { TFormFill } from "../../pages/FormForFill/types/types";
 import { useAppSelector } from "../../store/hooks";
 import { selectForms } from "../../store/reducers/forms/formsSlice";
+import RequestModal from "../../utils/RequestModal";
 
 const EditForm: React.FC<any> = () => {
   const { form, forms, isLoading } = useAppSelector(selectForms);
@@ -30,6 +31,7 @@ const EditForm: React.FC<any> = () => {
     name: "questions",
   });
   const [open, setOpen] = useState(false);
+  const [isRequested, setIsRequested] = useState(false);
   const location = useLocation();
   const [data, setData]: [FieldValues | undefined, Function] = useState();
 
@@ -71,6 +73,10 @@ const EditForm: React.FC<any> = () => {
     setData(data);
     setOpen(true);
   };
+
+  if (isRequested) {
+    return <RequestModal isOpen={isRequested} setIsOpen={setIsRequested} />;
+  }
 
   if (isLoading) {
     return (
@@ -122,6 +128,7 @@ const EditForm: React.FC<any> = () => {
               isOpen={open}
               data={data}
               onClose={setOpen}
+              setIsRequested={setIsRequested}
             />
           </form>
           <ButtonsBlock onAdd={append} />

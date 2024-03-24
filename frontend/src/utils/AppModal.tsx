@@ -1,22 +1,32 @@
 import React, { useEffect } from "react";
 import { Button, Modal } from "antd";
-import { postFormForFillData } from "./api/FormApi";
+import { postEditForm } from "./api/FormApi";
+import { useAppDispatch } from "../store/hooks";
 
-const AppModal: React.FC<any> = ({ title, data, isOpen, onClose }) => {
+const AppModal: React.FC<any> = ({
+  title,
+  data,
+  isOpen,
+  onClose,
+  setIsRequested,
+}) => {
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     console.log;
   }, [isOpen]);
 
   const handleYes = () => {
     data["active"] = true;
-    console.log(data);
-    postFormForFillData(data);
+    dispatch(postEditForm(data));
     onClose(false);
+    setIsRequested(true);
   };
   const handleNo = () => {
     data["active"] = false;
-    postFormForFillData(data);
+    dispatch(postEditForm(data));
     onClose(false);
+    setIsRequested(true);
   };
 
   const handleCancel = () => {

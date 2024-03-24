@@ -21,9 +21,24 @@ export const getEditFormById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<TForm[]>(
-        `${BASE_URL}/api/v1/filled-forms/${id}/`
+        `${BASE_URL}/api/v1/forms/${id}/`
       );
       return data[0];
+    } catch (e: any) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const postEditForm = createAsyncThunk(
+  "editForms/postEditForm",
+  async (form: TForm, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post<TFormFill[]>(
+        `${BASE_URL}/api/v1/forms/`,
+        form
+      );
+      return data;
     } catch (e: any) {
       return rejectWithValue(e.message);
     }
@@ -52,6 +67,21 @@ export const getFilledFormById = createAsyncThunk(
         `${BASE_URL}/api/v1/filled-forms/${id}/`
       );
       return data[0];
+    } catch (e: any) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const postFilledForm = createAsyncThunk(
+  "filledForms/postFilledForm",
+  async (form: any, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post<TFormFill[]>(
+        `${BASE_URL}/api/v1/filled-forms/`,
+        form
+      );
+      return data;
     } catch (e: any) {
       return rejectWithValue(e.message);
     }
