@@ -4,6 +4,7 @@ import LoginPage from "../Login/Login";
 import FormForFill from "../FormForFill/FormForFill";
 import { fetchActiveFormData } from "../../utils/api/FormApi";
 import { adminLoader } from "../../utils/loaders/AdminLoader";
+import ErrorPage from "../ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <FormForFill />,
     loader: fetchActiveFormData,
+    errorElement: <ErrorPage />,
   },
 ]);
 
