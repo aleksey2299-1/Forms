@@ -16,6 +16,7 @@ const CardBlock: React.FC<any> = ({
   onMove,
   id,
   isEditable = false,
+  onClick,
 }) => {
   const { control, watch, setValue } = useFormContext();
   const [dependsOnQuestionId, setDependsOnQuestionId] = useState();
@@ -80,7 +81,9 @@ const CardBlock: React.FC<any> = ({
           style={{ paddingTop: 10, paddingBottom: 10 }}
         >
           <Card
+            onPointerDown={onClick}
             className={`${styles.cardBlock}`}
+            id={id}
             style={{ opacity: dragAndDropFunctions?.isDragging ? 0.2 : 1 }}
             cover={
               !isTitle &&

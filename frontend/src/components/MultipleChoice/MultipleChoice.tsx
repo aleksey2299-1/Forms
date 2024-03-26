@@ -107,6 +107,9 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable }) => {
                 }
                 variant="borderless"
                 className={styles.underline}
+                onFocus={(e) => {
+                  e.target.blur();
+                }}
               />
             </Radio>
           )}

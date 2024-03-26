@@ -84,6 +84,9 @@ const Checkboxes: React.FC<any> = ({ index, isEditable }) => {
             placeholder={`Option ${fields.length + 1}`}
             style={{ width: 200, display: "flex" }}
             onClick={() => append({ option: `Option ${fields.length + 1}` })}
+            onFocus={(e) => {
+              e.target.blur();
+            }}
             variant="borderless"
             className={styles.underline}
           />

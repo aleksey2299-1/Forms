@@ -16,7 +16,12 @@ const QuestionButtons: React.FC<any> = ({ onDelete, index, onCopy }) => {
         />
       </Tooltip>
       <Tooltip title="delete" placement="bottom">
-        <Button shape="circle" icon={<DeleteOutlined />} onClick={onDelete} />
+        <Button
+          className="remove"
+          shape="circle"
+          icon={<DeleteOutlined className="remove" />}
+          onClick={onDelete}
+        />
       </Tooltip>
       <Divider
         type="vertical"

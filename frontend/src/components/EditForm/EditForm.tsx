@@ -20,20 +20,22 @@ import { TFormFill } from "../../pages/FormForFill/types/types";
 import { useAppSelector } from "../../store/hooks";
 import { selectForms } from "../../store/reducers/forms/formsSlice";
 import RequestModal from "../../utils/RequestModal";
+import CardContext from "../../utils/context/card-context";
 
 const EditForm: React.FC<any> = () => {
   const { form, forms, isLoading } = useAppSelector(selectForms);
+  const location = useLocation();
   const methods = useForm({
     defaultValues: form,
   });
-  const { fields, append, remove, insert, move } = useFieldArray({
+  const { fields, remove, insert, move } = useFieldArray({
     control: methods.control,
     name: "questions",
   });
   const [open, setOpen] = useState(false);
   const [isRequested, setIsRequested] = useState(false);
-  const location = useLocation();
   const [data, setData]: [FieldValues | undefined, Function] = useState();
+  const [element, setElement] = useState({ index: 0, elementId: "" });
 
   // TODO выглядит как костыль, нужно разобраться
   // Нужно для правильного Drag and Drop
@@ -103,35 +105,59 @@ const EditForm: React.FC<any> = () => {
     <DndProvider backend={HTML5Backend}>
       <Layout.Content className={styles.content}>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <CardBlock isTitle={true} isEditable={true} />
-            {fields.map((item, index) => (
-              <Controller
-                key={item.id}
-                name={`questions`}
-                control={methods.control}
-                render={() => (
-                  <CardBlock
-                    onDelete={() => remove(index)}
-                    index={index}
-                    id={item.id}
-                    onCopy={insert}
-                    onMove={move}
-                    isEditable={true}
-                  />
-                )}
+          <CardContext.Provider value={element}>
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
+              <CardBlock
+                isTitle={true}
+                isEditable={true}
+                onClick={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setElement({ index: 0, elementId: e.currentTarget.id })
+                }
               />
-            ))}
-            <Button htmlType="submit" shape="circle" icon={<CheckOutlined />} />
-            <AppModal
-              title="Choose option"
-              isOpen={open}
-              data={data}
-              onClose={setOpen}
-              setIsRequested={setIsRequested}
-            />
-          </form>
-          <ButtonsBlock onAdd={append} />
+              {fields.map((item, index) => (
+                <Controller
+                  key={item.id}
+                  name={`questions`}
+                  control={methods.control}
+                  render={() => (
+                    <CardBlock
+                      onDelete={() => {
+                        remove(index);
+                        setElement({
+                          index: index,
+                          elementId: index != 0 ? fields[index - 1].id : "",
+                        });
+                      }}
+                      index={index}
+                      id={item.id}
+                      onCopy={insert}
+                      onMove={move}
+                      isEditable={true}
+                      onClick={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setElement({
+                          index: index + 1,
+                          elementId: e.currentTarget.id,
+                        })
+                      }
+                    />
+                  )}
+                />
+              ))}
+              <Button
+                htmlType="submit"
+                shape="circle"
+                icon={<CheckOutlined />}
+              />
+              <AppModal
+                title="Choose option"
+                isOpen={open}
+                data={data}
+                onClose={setOpen}
+                setIsRequested={setIsRequested}
+              />
+            </form>
+            <ButtonsBlock onAdd={insert} />
+          </CardContext.Provider>
         </FormProvider>
       </Layout.Content>
     </DndProvider>
