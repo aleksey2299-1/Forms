@@ -1,25 +1,30 @@
 import { CloseOutlined } from "@ant-design/icons";
-import { Button, Flex, Input, Select, Tooltip } from "antd";
+import { Button, Flex, Input, Select, Tooltip, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import styles from "./DropDown.module.scss";
 import { TOption } from "../QuestionOption/types/types";
 import { useLocation } from "react-router-dom";
+import { ErrorMessage } from "@hookform/error-message";
 
-const DropDown: React.FC<any> = ({ index, isEditable }) => {
-  const { control, watch, setValue } = useFormContext();
+const DropDown: React.FC<any> = ({ index, isEditable, isRequired }) => {
+  const {
+    control,
+    watch,
+    formState: { errors },
+  } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `questions[${index}].options`,
+    name: `questions.${index}.options`,
   });
   const location = useLocation();
   const [isFilled, setIsFilled] = useState(false);
-
-  const options: TOption[] = watch(`questions[${index}].options`);
+  const answers = watch(`questions.${index}.answers.0`);
+  const options: TOption[] = watch(`questions.${index}.options`);
 
   useEffect(() => {
     if (isEditable) {
-      const currentValue = watch(`questions[${index}].options`);
+      const currentValue = watch(`questions.${index}.options`);
       if (currentValue.length === 0) {
         append({ option: "Option 1" });
       }
@@ -40,7 +45,7 @@ const DropDown: React.FC<any> = ({ index, isEditable }) => {
           {fields.map((item, optionIndex) => (
             <Controller
               key={item.id}
-              name={`questions[${index}].options[${optionIndex}].option`}
+              name={`questions.${index}.options.${optionIndex}.option`}
               control={control}
               defaultValue={`Option ${optionIndex + 1}`}
               render={({ field }) => (
@@ -84,39 +89,40 @@ const DropDown: React.FC<any> = ({ index, isEditable }) => {
           </li>
         </ol>
       ) : (
-        <Controller
-          name={`questions[${index}].answer`}
-          control={control}
-          render={({ field }) => (
-            <Select
-              placeholder="Choose option"
-              options={options.map((e) => ({
-                value: e.option,
-                label: e.option,
-              }))}
-              style={{ width: 200, display: "flex" }}
-              allowClear
-              {...field}
-              onChange={(selectedOption) => {
-                const updatedOptions = options.map((option) => {
-                  if (option.option === selectedOption) {
-                    return {
-                      ...option,
-                      checked: true,
-                    };
-                  } else {
-                    return {
-                      ...option,
-                      checked: false,
-                    };
-                  }
-                });
-                setValue(`questions[${index}].options`, updatedOptions);
-                field.onChange(selectedOption);
-              }}
-            />
-          )}
-        />
+        <>
+          <Controller
+            name={`questions.${index}.answers.0`}
+            control={control}
+            rules={{
+              required: {
+                value: isRequired,
+                message: "This is a required question",
+              },
+            }}
+            render={({ field }) => (
+              <Select
+                placeholder="Choose option"
+                options={options.map((e) => ({
+                  value: e.option,
+                  label: e.option,
+                }))}
+                style={{ width: 200, display: "flex" }}
+                allowClear
+                {...field}
+                value={!isFilled ? field.value : answers}
+              />
+            )}
+          />
+          <ErrorMessage
+            errors={errors}
+            name={`questions.${index}.answers.0`}
+            render={({ message }) => (
+              <Typography style={{ display: "flex", color: "#e0434b" }}>
+                {message}
+              </Typography>
+            )}
+          />
+        </>
       )}
     </>
   );

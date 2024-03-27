@@ -1,4 +1,4 @@
-import { Input, Divider, Flex, Select } from "antd";
+import { Input, Divider, Flex, Select, Typography } from "antd";
 import QuestionOption from "../QuestionOption/QuestionOption";
 import QuestionButtons from "../QuestionButtons/QuestionButtons";
 import { Controller, useFormContext } from "react-hook-form";
@@ -16,30 +16,49 @@ const optionsList = [
   { value: "File upload" },
 ];
 
-const Question: React.FC<any> = ({ index, onDelete, onCopy, isEditable }) => {
+const Question: React.FC<any> = ({
+  index,
+  onDelete,
+  onCopy,
+  isEditable,
+  isShow,
+}) => {
   const { control, watch, unregister } = useFormContext();
-  const currentOption = watch(`questions[${index}].type`);
+  const currentOption = watch(`questions.${index}.type`);
+  const isRequired = watch(`questions.${index}.required]`);
 
   return (
     <>
       {isEditable && <Dependence index={index} isEditable={isEditable} />}
-      <Flex style={{ marginBottom: 10, gap: 10 }}>
+      <Flex
+        style={{
+          marginBottom: 10,
+          gap: isEditable ? 10 : 0,
+          display: "flex",
+          justifyContent: "start",
+        }}
+      >
+        {isRequired && !isEditable && (
+          <Typography style={{ color: "#e0434b", marginTop: 3 }}>*</Typography>
+        )}
         <Controller
-          name={`questions[${index}].name`}
+          name={`questions.${index}.name`}
           control={control}
           render={({ field }) => (
-            <Input
-              placeholder="Question"
-              {...field}
-              disabled={!isEditable}
-              className={isEditable && styles.underline}
-              variant="borderless"
-            />
+            <>
+              <Input
+                placeholder="Question"
+                {...field}
+                disabled={!isEditable}
+                className={isEditable && styles.underline}
+                variant="borderless"
+              />
+            </>
           )}
         />
         {isEditable && (
           <Controller
-            name={`questions[${index}].type`}
+            name={`questions.${index}.type`}
             defaultValue={optionsList[0].value}
             control={control}
             render={({ field }) => (
@@ -50,7 +69,7 @@ const Question: React.FC<any> = ({ index, onDelete, onCopy, isEditable }) => {
                 {...field}
                 onChange={(value) => {
                   if (!optionsList.slice(2, 5).some((e) => e.value === value)) {
-                    unregister(`questions[${index}].options`);
+                    unregister(`questions.${index}.options`);
                   }
                   field.onChange(value);
                 }}
@@ -63,6 +82,7 @@ const Question: React.FC<any> = ({ index, onDelete, onCopy, isEditable }) => {
         currentOption={currentOption || optionsList[0].value}
         index={index}
         isEditable={isEditable}
+        isRequired={isRequired && isShow && !isEditable}
       />
       {isEditable && (
         <>

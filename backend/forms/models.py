@@ -2,56 +2,11 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 
-class AbstractForm(models.Model):
-    """Абстрактная модель формы."""
+class Form(models.Model):
+    """Модель формы для заполнения."""
 
     title = models.CharField()
     description = models.TextField()
-
-    class Meta:
-        abstract = True
-
-
-class AbstractQuestion(models.Model):
-    """Абстрактная модель вопроса."""
-
-    class Types(models.TextChoices):
-        """Виды вопроса."""
-
-        Short = "Short answer"
-        Long = "Paragraph"
-        Date = "Date"
-        Time = "Time"
-        Checkboxes = "Checkboxes"
-        Multiple = "Multiple choice"
-        Dropdown = "Drop-down"
-
-    name = models.CharField()
-    type = models.CharField(choices=Types.choices)
-    required = models.BooleanField(default=False)
-
-    class Meta:
-        abstract = True
-        verbose_name = "Вопрос"
-        verbose_name_plural = "Вопросы"
-        ordering = ("id",)
-
-
-class AbstractOption(models.Model):
-    """Абстрактная модель опции."""
-
-    option = models.CharField()
-
-    class Meta:
-        abstract = True
-        verbose_name = "Опция"
-        verbose_name_plural = "Опции"
-        ordering = ("id",)
-
-
-class Form(AbstractForm):
-    """Модель формы для заполнения."""
-
     active = models.BooleanField(default=False)
 
     class Meta:
@@ -66,7 +21,7 @@ class Form(AbstractForm):
                 raise ValidationError("Only one form can be active.")
 
 
-class FilledForm(AbstractForm):
+class FilledForm(models.Model):
     """Модель заполненной формы."""
 
     parent = models.ForeignKey(
@@ -79,8 +34,19 @@ class FilledForm(AbstractForm):
         ordering = ("-id",)
 
 
-class Question(AbstractQuestion):
+class Question(models.Model):
     """Модель вопроса для ответа."""
+
+    class Types(models.TextChoices):
+        """Виды вопроса."""
+
+        Short = "Short answer"
+        Long = "Paragraph"
+        Date = "Date"
+        Time = "Time"
+        Checkboxes = "Checkboxes"
+        Multiple = "Multiple choice"
+        Dropdown = "Drop-down"
 
     form = models.ForeignKey(Form, related_name="questions", on_delete=models.CASCADE)
     depends = models.ForeignKey(
@@ -90,44 +56,45 @@ class Question(AbstractQuestion):
         blank=True,
         null=True,
     )
+    name = models.CharField()
+    type = models.CharField(choices=Types.choices)
+    required = models.BooleanField(default=False)
 
-    class Meta(AbstractQuestion.Meta):
-        abstract = False
-
-
-class FilledQuestion(AbstractQuestion):
-    """Модель вопроса с ответом."""
-
-    form = models.ForeignKey(
-        FilledForm, related_name="questions", on_delete=models.CASCADE
-    )
-    answer = models.TextField(blank=True, null=True)
-
-    class Meta(AbstractQuestion.Meta):
-        abstract = False
+    class Meta:
+        verbose_name = "Вопрос"
+        verbose_name_plural = "Вопросы"
+        ordering = ("id",)
 
 
-class Option(AbstractOption):
+class Option(models.Model):
     """Модель опции для выбора."""
 
     question = models.ForeignKey(
         Question, related_name="options", on_delete=models.CASCADE
     )
+    option = models.CharField()
 
-    class Meta(AbstractOption.Meta):
-        abstract = False
+    class Meta:
+        verbose_name = "Опция"
+        verbose_name_plural = "Опции"
+        ordering = ("id",)
 
 
-class FilledOption(AbstractOption):
-    """Модель опции."""
+class Answer(models.Model):
+    """Модель ответа на вопрос."""
 
     question = models.ForeignKey(
-        FilledQuestion, related_name="options", on_delete=models.CASCADE
+        Question, related_name="answers", on_delete=models.CASCADE
     )
-    checked = models.BooleanField(default=False)
+    form = models.ForeignKey(
+        FilledForm, related_name="answers", on_delete=models.CASCADE
+    )
+    answer = models.TextField()
 
-    class Meta(AbstractOption.Meta):
-        abstract = False
+    class Meta:
+        verbose_name = "Ответ"
+        verbose_name_plural = "Ответы"
+        ordering = ("-id",)
 
 
 class Dependence(models.Model):

@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { DragOutlined } from "@ant-design/icons";
 import DragAndDrop from "../../utils/DragAndDrop";
 import { TQuestion } from "../Question/types/types";
-import { TOptionFromBack } from "../QuestionOption/types/types";
+import { useLocation } from "react-router-dom";
 
 const CardBlock: React.FC<any> = ({
   isTitle,
@@ -20,15 +20,18 @@ const CardBlock: React.FC<any> = ({
 }) => {
   const { control, watch, setValue } = useFormContext();
   const [dependsOnQuestionId, setDependsOnQuestionId] = useState();
-  const [dependsOnOptionId, setDependsOnOptionId] = useState();
-
-  const depends = watch(`questions[${index}].depends`);
+  const location = useLocation();
+  const depends = watch(`questions.${index}.depends`);
+  const showCard =
+    watch(`questions.${dependsOnQuestionId}.answers`)?.find(
+      (item: any) => item == depends.option
+    ) != undefined;
 
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!watch(`questions[${index}].id`)) {
-      setValue(`questions[${index}].id`, id);
+    if (!watch(`questions.${index}.id`)) {
+      setValue(`questions.${index}.id`, id);
     }
     if (depends) {
       const questionId = watch(`questions`).findIndex(
@@ -36,29 +39,12 @@ const CardBlock: React.FC<any> = ({
       );
       setDependsOnQuestionId(questionId);
 
-      const optionId = watch(`questions[${questionId}].options`).findIndex(
-        (option: TOptionFromBack) => option.option === depends.option
-      );
-      setDependsOnOptionId(optionId);
-
-      const isShow = watch(
-        `questions[${questionId}].options[${optionId}].checked`
-      );
-      // Обнуляем все выбранные опции и ответы при смене корневой зависимости
-      if (!isShow) {
-        watch(`questions[${index}].options`)?.forEach(
-          (_: any, optIndex: number) => {
-            setValue(`questions[${index}].options[${optIndex}].checked`, false);
-          }
-        );
-        setValue(`questions[${index}].answer`, undefined);
+      // Обнуляем все ответы при смене корневой зависимости
+      if (!showCard && !location.pathname.includes("forms")) {
+        setValue(`questions.${index}.answers`, undefined);
       }
     }
-  }, [
-    watch(
-      `questions[${dependsOnQuestionId}].options[${dependsOnOptionId}].checked`
-    ),
-  ]);
+  }, [showCard]);
 
   let dragAndDropFunctions = null;
 
@@ -69,13 +55,7 @@ const CardBlock: React.FC<any> = ({
 
   return (
     <>
-      {(isEditable ||
-        (!isEditable &&
-          ((depends &&
-            watch(
-              `questions[${dependsOnQuestionId}].options[${dependsOnOptionId}].checked`
-            )) ||
-            !depends))) && (
+      {(isEditable || (!isEditable && ((depends && showCard) || !depends))) && (
         <div
           ref={isEditable ? ref : undefined}
           style={{ paddingTop: 10, paddingBottom: 10 }}
@@ -133,6 +113,7 @@ const CardBlock: React.FC<any> = ({
                 index={index}
                 onCopy={onCopy}
                 isEditable={isEditable}
+                isShow={(depends && showCard) || !depends}
               />
             )}
           </Card>

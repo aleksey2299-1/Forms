@@ -147,6 +147,7 @@ const EditForm: React.FC<any> = () => {
                 htmlType="submit"
                 shape="circle"
                 icon={<CheckOutlined />}
+                style={{ marginBottom: 20 }}
               />
               <AppModal
                 title="Choose option"

@@ -12,7 +12,7 @@ const Dependence: React.FC<any> = ({ index }) => {
     name: "questions",
     defaultValue: [],
   });
-  const dependsValue = watch(`questions[${index}].depends.question`);
+  const dependsValue = watch(`questions.${index}.depends.question`);
 
   const questions = watchQuestions
     .filter(
@@ -36,8 +36,8 @@ const Dependence: React.FC<any> = ({ index }) => {
       (!watchQuestions.some((item) => item.id === dependsValue) ||
         watchQuestions.findIndex((item) => item.id === dependsValue) > index)
     ) {
-      setValue(`questions[${index}].depends`, undefined);
-      unregister(`questions[${index}].depends`);
+      setValue(`questions.${index}.depends`, undefined);
+      unregister(`questions.${index}.depends`);
     }
   }, [watchQuestions]);
 
@@ -50,7 +50,7 @@ const Dependence: React.FC<any> = ({ index }) => {
           </Typography.Title>
           <Flex style={{ marginBottom: 10, gap: 10 }}>
             <Controller
-              name={`questions[${index}].depends.question`}
+              name={`questions.${index}.depends.question`}
               control={control}
               render={({ field }) => (
                 <Select
@@ -64,7 +64,7 @@ const Dependence: React.FC<any> = ({ index }) => {
             />
             {dependsValue && (
               <Controller
-                name={`questions[${index}].depends.option`}
+                name={`questions.${index}.depends.option`}
                 control={control}
                 render={({ field }) => (
                   <Select

@@ -25,6 +25,8 @@ const FormForFill: React.FC<any> = () => {
   const { forms } = useAppSelector(selectFilledForms);
   const location = useLocation();
 
+  console.log(form);
+
   useEffect(() => {
     if (location.pathname === "/") {
       Object.keys(activeForm).forEach((fieldName) => {
@@ -34,6 +36,7 @@ const FormForFill: React.FC<any> = () => {
     } else if (location.state?.type === "sub2") {
       const filledForm = forms.find((item) => item.id === location.state.key);
       if (filledForm) {
+        methods.reset();
         Object.keys(filledForm).forEach((fieldName) => {
           methods.setValue(fieldName, filledForm[fieldName as keyof TFormFill]);
         });
@@ -41,6 +44,10 @@ const FormForFill: React.FC<any> = () => {
       }
     }
   }, [activeForm, location]);
+
+  const handleSubmitClick = () => {
+    console.log(methods.getValues());
+  };
 
   const onSubmit = (data: FieldValues) => {
     data["parent"] = data["id"];
@@ -78,6 +85,7 @@ const FormForFill: React.FC<any> = () => {
                 htmlType="submit"
                 shape="circle"
                 icon={<CheckOutlined />}
+                onClick={handleSubmitClick}
               />
             )}
           </form>

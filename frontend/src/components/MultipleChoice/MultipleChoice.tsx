@@ -1,22 +1,28 @@
 import { CloseOutlined } from "@ant-design/icons";
-import { Button, Radio, Flex, Input, Tooltip } from "antd";
+import { Button, Radio, Flex, Input, Tooltip, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import styles from "./MultipleChoice.module.scss";
 import { useLocation } from "react-router-dom";
+import { ErrorMessage } from "@hookform/error-message";
 
-const MultipleChoice: React.FC<any> = ({ index, isEditable }) => {
-  const { control, watch, setValue } = useFormContext();
+const MultipleChoice: React.FC<any> = ({ index, isEditable, isRequired }) => {
+  const {
+    control,
+    watch,
+    formState: { errors },
+  } = useFormContext();
   const location = useLocation();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `questions[${index}].options`,
+    name: `questions.${index}.options`,
   });
   const [isFilled, setIsFilled] = useState(false);
+  const answers = watch(`questions.${index}.answers.0`);
 
   useEffect(() => {
     if (isEditable) {
-      const currentValue = watch(`questions[${index}].options`);
+      const currentValue = watch(`questions.${index}.options`);
       if (currentValue.length === 0) {
         append({ option: "Option 1" });
       }
@@ -26,48 +32,33 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable }) => {
   useEffect(() => {
     const isFormFilled = location.state?.type === "sub2";
     if (isFormFilled) {
-      const indexToSet = watch(`questions[${index}].answer`);
-      setValue(`questions[${index}].answer`, parseInt(indexToSet));
       setIsFilled(isFormFilled);
     }
   }, [location]);
 
   return (
     <Controller
-      name={`questions[${index}].answer`}
+      name={`questions.${index}.answers.0`}
+      rules={{
+        required: { value: isRequired, message: "This is a required question" },
+      }}
       control={control}
       render={({ field }) => (
         <Radio.Group
           style={{ display: "contents" }}
           {...field}
-          onChange={(e) => {
-            const options = watch(`questions[${index}].options`);
-            options.forEach((_: any, optionIndex: number) => {
-              setValue(
-                `questions[${index}].options[${optionIndex}].checked`,
-                false
-              );
-            });
-            setValue(
-              `questions[${index}].options[${e.target.value}].checked`,
-              true
-            );
-            field.onChange(e.target.value);
-          }}
+          disabled={isEditable}
+          value={!isFilled ? field.value : answers}
         >
-          {fields.map((item, optionIndex) => (
+          {fields.map((item: any, optionIndex) => (
             <Flex
               key={item.id}
               justify="space-between"
               style={{ marginBottom: 5 }}
             >
-              <Radio
-                disabled={isEditable}
-                defaultChecked={false}
-                value={optionIndex}
-              >
+              <Radio defaultChecked={false} value={item.option}>
                 <Controller
-                  name={`questions[${index}].options[${optionIndex}].option`}
+                  name={`questions.${index}.options.${optionIndex}.option`}
                   control={control}
                   defaultValue={`Option ${optionIndex + 1}`}
                   render={({ field }) => (
@@ -113,6 +104,15 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable }) => {
               />
             </Radio>
           )}
+          <ErrorMessage
+            errors={errors}
+            name={`questions.${index}.answers.0`}
+            render={({ message }) => (
+              <Typography style={{ display: "flex", color: "#e0434b" }}>
+                {message}
+              </Typography>
+            )}
+          />
         </Radio.Group>
       )}
     />
