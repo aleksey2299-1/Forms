@@ -156,9 +156,6 @@ class RepresentationQuestionSerializer(serializers.ModelSerializer):
     options = OptionSerializer(many=True, required=False)
     answers = serializers.SerializerMethodField()
 
-    def __init__(self, instance=None, data=..., **kwargs):
-        super().__init__(instance, data, **kwargs)
-
     class Meta:
         model = Question
         fields = ("id", "name", "type", "required", "depends", "options", "answers")
