@@ -1,15 +1,16 @@
-import { Divider, Flex, Select, Typography } from "antd";
-import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { TQuestion } from "../Question/types/types";
-import { useEffect } from "react";
+import { Divider, Flex, Select, Typography } from 'antd';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { TQuestion } from '../Question/types/types';
+import { useEffect } from 'react';
+import { TDependenceProps } from './types/types';
 
-const dependsTypes = ["Multiple choice", "Checkboxes", "Drop-down"];
+const dependsTypes = ['Multiple choice', 'Checkboxes', 'Drop-down'];
 
-const Dependence: React.FC<any> = ({ index }) => {
+const Dependence: React.FC<TDependenceProps> = ({ index }) => {
   const { control, watch, unregister, setValue } = useFormContext();
   const watchQuestions: TQuestion[] = useWatch({
     control,
-    name: "questions",
+    name: 'questions',
     defaultValue: [],
   });
   const dependsValue = watch(`questions.${index}.depends.question`);
@@ -17,18 +18,14 @@ const Dependence: React.FC<any> = ({ index }) => {
   const questions = watchQuestions
     .filter(
       (question, questionIndex) =>
-        questionIndex < index &&
-        question.name !== undefined &&
-        dependsTypes.includes(question.type)
+        questionIndex < index && question.name !== undefined && dependsTypes.includes(question.type)
     )
     .map((item) => ({
       value: item.id,
       label: item.name,
     }));
 
-  const options = watchQuestions.find(
-    (item) => item.id === dependsValue
-  )?.options;
+  const options = watchQuestions.find((item) => item.id === dependsValue)?.options;
 
   useEffect(() => {
     if (
@@ -39,13 +36,13 @@ const Dependence: React.FC<any> = ({ index }) => {
       setValue(`questions.${index}.depends`, undefined);
       unregister(`questions.${index}.depends`);
     }
-  }, [watchQuestions]);
+  }, [watchQuestions, dependsValue, index, setValue, unregister]);
 
   return (
     <>
       {questions.length > 0 && (
         <>
-          <Typography.Title level={5} style={{ display: "flex" }}>
+          <Typography.Title level={5} style={{ display: 'flex' }}>
             Setup dependence
           </Typography.Title>
           <Flex style={{ marginBottom: 10, gap: 10 }}>
@@ -77,7 +74,7 @@ const Dependence: React.FC<any> = ({ index }) => {
               />
             )}
           </Flex>
-          <Divider style={{ backgroundColor: "#000000" }}></Divider>
+          <Divider style={{ backgroundColor: '#000000' }}></Divider>
         </>
       )}
     </>

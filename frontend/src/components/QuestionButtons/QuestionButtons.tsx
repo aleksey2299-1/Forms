@@ -1,8 +1,9 @@
-import { CopyOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button, Divider, Flex, Switch, Tooltip } from "antd";
-import { Controller, useFormContext } from "react-hook-form";
+import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Divider, Flex, Switch, Tooltip } from 'antd';
+import { Controller, useFormContext } from 'react-hook-form';
+import { TQuestionButtonsProps } from './types/types';
 
-const QuestionButtons: React.FC<any> = ({ onDelete, index, onCopy }) => {
+const QuestionButtons: React.FC<TQuestionButtonsProps> = ({ onDelete, index, onCopy }) => {
   const { control, watch } = useFormContext();
   const currentQuesion = watch(`questions[${index}]`);
 
@@ -23,10 +24,7 @@ const QuestionButtons: React.FC<any> = ({ onDelete, index, onCopy }) => {
           onClick={onDelete}
         />
       </Tooltip>
-      <Divider
-        type="vertical"
-        style={{ backgroundColor: "#000000", height: 33 }}
-      />
+      <Divider type="vertical" style={{ backgroundColor: '#000000', height: 33 }} />
       <Controller
         name={`questions[${index}].required`}
         defaultValue={false}
@@ -34,11 +32,7 @@ const QuestionButtons: React.FC<any> = ({ onDelete, index, onCopy }) => {
         render={({ field }) => (
           <label style={{ fontSize: 18 }}>
             Required
-            <Switch
-              defaultChecked={false}
-              style={{ marginLeft: 10, marginBottom: 4 }}
-              {...field}
-            />
+            <Switch defaultChecked={false} style={{ marginLeft: 10, marginBottom: 4 }} {...field} />
           </label>
         )}
       />

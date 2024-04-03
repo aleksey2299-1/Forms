@@ -1,11 +1,11 @@
-import axios, { AxiosError } from "axios";
-import { TFormFill } from "../../pages/FormForFill/types/types";
-import { TForm } from "../../components/EditForm/types/types";
-import { BASE_URL } from "../constants/constants";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios, { AxiosError } from 'axios';
+import { TFormFill } from '../../pages/FormForFill/types/types';
+import { TForm } from '../../components/EditForm/types/types';
+import { BASE_URL } from '../constants/constants';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const getAllEditForms = createAsyncThunk(
-  "editForms/getAllEditForms",
+  'editForms/getAllEditForms',
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<TForm[]>(`${BASE_URL}/api/v1/forms/`);
@@ -17,12 +17,10 @@ export const getAllEditForms = createAsyncThunk(
 );
 
 export const getEditFormById = createAsyncThunk(
-  "editForms/getEditFormById",
+  'editForms/getEditFormById',
   async (id: number, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<TForm[]>(
-        `${BASE_URL}/api/v1/forms/${id}/`
-      );
+      const { data } = await axios.get<TForm[]>(`${BASE_URL}/api/v1/forms/${id}/`);
       return data[0];
     } catch (e: any) {
       return rejectWithValue(e.message);
@@ -31,13 +29,10 @@ export const getEditFormById = createAsyncThunk(
 );
 
 export const postEditForm = createAsyncThunk(
-  "editForms/postEditForm",
+  'editForms/postEditForm',
   async (form: TForm, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post<TFormFill[]>(
-        `${BASE_URL}/api/v1/forms/`,
-        form
-      );
+      const { data } = await axios.post<TFormFill[]>(`${BASE_URL}/api/v1/forms/`, form);
       return data;
     } catch (e: any) {
       return rejectWithValue(e.message);
@@ -46,12 +41,10 @@ export const postEditForm = createAsyncThunk(
 );
 
 export const getAllFilledForms = createAsyncThunk(
-  "filledForms/getAllFilledForms",
+  'filledForms/getAllFilledForms',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<TFormFill[]>(
-        `${BASE_URL}/api/v1/filled-forms/`
-      );
+      const { data } = await axios.get<TFormFill[]>(`${BASE_URL}/api/v1/filled-forms/`);
       return data;
     } catch (e: any) {
       return rejectWithValue(e.message);
@@ -60,12 +53,10 @@ export const getAllFilledForms = createAsyncThunk(
 );
 
 export const getFilledFormById = createAsyncThunk(
-  "filledForms/getFilledFormById",
+  'filledForms/getFilledFormById',
   async (id: number, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<TFormFill[]>(
-        `${BASE_URL}/api/v1/filled-forms/${id}/`
-      );
+      const { data } = await axios.get<TFormFill[]>(`${BASE_URL}/api/v1/filled-forms/${id}/`);
       return data[0];
     } catch (e: any) {
       return rejectWithValue(e.message);
@@ -74,13 +65,10 @@ export const getFilledFormById = createAsyncThunk(
 );
 
 export const postFilledForm = createAsyncThunk(
-  "filledForms/postFilledForm",
+  'filledForms/postFilledForm',
   async (form: any, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post<TFormFill[]>(
-        `${BASE_URL}/api/v1/filled-forms/`,
-        form
-      );
+      const { data } = await axios.post<TFormFill[]>(`${BASE_URL}/api/v1/filled-forms/`, form);
       return data;
     } catch (e: any) {
       return rejectWithValue(e.message);
@@ -90,9 +78,7 @@ export const postFilledForm = createAsyncThunk(
 
 export const fetchActiveFormData = async () => {
   try {
-    const { data } = await axios.get<TFormFill[]>(
-      `${BASE_URL}/api/v1/forms/?active=true`
-    );
+    const { data } = await axios.get<TFormFill[]>(`${BASE_URL}/api/v1/forms/?active=true`);
     return data[0];
   } catch (error) {
     throw new Error((error as AxiosError).message);

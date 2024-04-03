@@ -1,15 +1,16 @@
-import { DatePicker, Input, TimePicker, Typography } from "antd";
-import DropDown from "../DropDown/DropDown";
-import Checkboxes from "../Checkboxes/Checkboxes";
-import MultipleChoice from "../MultipleChoice/MultipleChoice";
-import { Controller, useFormContext } from "react-hook-form";
-import styles from "./QuestionOption.module.scss";
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import { ErrorMessage } from "@hookform/error-message";
+import { DatePicker, Input, TimePicker, Typography } from 'antd';
+import DropDown from '../DropDown/DropDown';
+import Checkboxes from '../Checkboxes/Checkboxes';
+import MultipleChoice from '../MultipleChoice/MultipleChoice';
+import { Controller, useFormContext } from 'react-hook-form';
+import styles from './QuestionOption.module.scss';
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import { ErrorMessage } from '@hookform/error-message';
+import { TQuestionOptionProps } from './types/types';
 
-const QuestionOption: React.FC<any> = ({
+const QuestionOption: React.FC<TQuestionOptionProps> = ({
   currentOption,
   index,
   isEditable,
@@ -23,13 +24,13 @@ const QuestionOption: React.FC<any> = ({
   const location = useLocation();
 
   useEffect(() => {
-    const formIsFilled = location.pathname.includes("filled-forms");
+    const formIsFilled = location.pathname.includes('filled-forms');
     setIsFilled(formIsFilled);
   }, [location]);
 
   const option = () => {
     switch (currentOption) {
-      case "Short answer":
+      case 'Short answer':
         return (
           <>
             <Controller
@@ -38,7 +39,7 @@ const QuestionOption: React.FC<any> = ({
               rules={{
                 required: {
                   value: isRequired,
-                  message: "This is a required question",
+                  message: 'This is a required question',
                 },
               }}
               render={({ field }) => (
@@ -55,14 +56,12 @@ const QuestionOption: React.FC<any> = ({
               errors={errors}
               name={`questions.${index}.answers.0`}
               render={({ message }) => (
-                <Typography style={{ display: "flex", color: "#e0434b" }}>
-                  {message}
-                </Typography>
+                <Typography style={{ display: 'flex', color: '#e0434b' }}>{message}</Typography>
               )}
             />
           </>
         );
-      case "Paragraph":
+      case 'Paragraph':
         return (
           <>
             <Controller
@@ -71,7 +70,7 @@ const QuestionOption: React.FC<any> = ({
               rules={{
                 required: {
                   value: isRequired,
-                  message: "This is a required question",
+                  message: 'This is a required question',
                 },
               }}
               render={({ field }) => (
@@ -89,14 +88,12 @@ const QuestionOption: React.FC<any> = ({
               errors={errors}
               name={`questions.${index}.answers.0`}
               render={({ message }) => (
-                <Typography style={{ display: "flex", color: "#e0434b" }}>
-                  {message}
-                </Typography>
+                <Typography style={{ display: 'flex', color: '#e0434b' }}>{message}</Typography>
               )}
             />
           </>
         );
-      case "Multiple choice":
+      case 'Multiple choice':
         return (
           <MultipleChoice
             index={index}
@@ -104,23 +101,15 @@ const QuestionOption: React.FC<any> = ({
             isRequired={isRequired}
           />
         );
-      case "Checkboxes":
+      case 'Checkboxes':
         return (
-          <Checkboxes
-            index={index}
-            isEditable={isEditable || isFilled}
-            isRequired={isRequired}
-          />
+          <Checkboxes index={index} isEditable={isEditable || isFilled} isRequired={isRequired} />
         );
-      case "Drop-down":
+      case 'Drop-down':
         return (
-          <DropDown
-            index={index}
-            isEditable={isEditable || isFilled}
-            isRequired={isRequired}
-          />
+          <DropDown index={index} isEditable={isEditable || isFilled} isRequired={isRequired} />
         );
-      case "Date":
+      case 'Date':
         return (
           <>
             <Controller
@@ -129,19 +118,15 @@ const QuestionOption: React.FC<any> = ({
               rules={{
                 required: {
                   value: isRequired,
-                  message: "This is a required question",
+                  message: 'This is a required question',
                 },
               }}
               render={({ field }) => (
                 <DatePicker
-                  style={{ display: "flex", width: 150 }}
+                  style={{ display: 'flex', width: 150 }}
                   disabled={isEditable || isFilled}
                   {...field}
-                  value={
-                    typeof field.value === "string"
-                      ? dayjs(field.value)
-                      : field.value
-                  }
+                  value={typeof field.value === 'string' ? dayjs(field.value) : field.value}
                 />
               )}
             />
@@ -149,14 +134,12 @@ const QuestionOption: React.FC<any> = ({
               errors={errors}
               name={`questions.${index}.answers.0`}
               render={({ message }) => (
-                <Typography style={{ display: "flex", color: "#e0434b" }}>
-                  {message}
-                </Typography>
+                <Typography style={{ display: 'flex', color: '#e0434b' }}>{message}</Typography>
               )}
             />
           </>
         );
-      case "Time":
+      case 'Time':
         return (
           <>
             <Controller
@@ -165,19 +148,15 @@ const QuestionOption: React.FC<any> = ({
               rules={{
                 required: {
                   value: isRequired,
-                  message: "This is a required question",
+                  message: 'This is a required question',
                 },
               }}
               render={({ field }) => (
                 <TimePicker
-                  style={{ display: "flex", width: 150 }}
+                  style={{ display: 'flex', width: 150 }}
                   disabled={isEditable || isFilled}
                   {...field}
-                  value={
-                    typeof field.value === "string"
-                      ? dayjs(field.value)
-                      : field.value
-                  }
+                  value={typeof field.value === 'string' ? dayjs(field.value) : field.value}
                 />
               )}
             />
@@ -185,14 +164,12 @@ const QuestionOption: React.FC<any> = ({
               errors={errors}
               name={`questions.${index}.answers.0`}
               render={({ message }) => (
-                <Typography style={{ display: "flex", color: "#e0434b" }}>
-                  {message}
-                </Typography>
+                <Typography style={{ display: 'flex', color: '#e0434b' }}>{message}</Typography>
               )}
             />
           </>
         );
-      case "File upload":
+      case 'File upload':
         return null;
     }
   };

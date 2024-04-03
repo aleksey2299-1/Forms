@@ -1,45 +1,40 @@
-import { Input, Divider, Flex, Select, Typography } from "antd";
-import QuestionOption from "../QuestionOption/QuestionOption";
-import QuestionButtons from "../QuestionButtons/QuestionButtons";
-import { Controller, useFormContext } from "react-hook-form";
-import Dependence from "../Dependence/Dependence";
-import styles from "./Question.module.scss";
+import { Input, Divider, Flex, Select, Typography } from 'antd';
+import QuestionOption from '../QuestionOption/QuestionOption';
+import QuestionButtons from '../QuestionButtons/QuestionButtons';
+import { Controller, useFormContext } from 'react-hook-form';
+import Dependence from '../Dependence/Dependence';
+import styles from './Question.module.scss';
+import { TQuestionProps } from './types/types';
 
 const optionsList = [
-  { value: "Short answer" },
-  { value: "Paragraph" },
-  { value: "Multiple choice" },
-  { value: "Checkboxes" },
-  { value: "Drop-down" },
-  { value: "Date" },
-  { value: "Time" },
-  { value: "File upload" },
+  { value: 'Short answer' },
+  { value: 'Paragraph' },
+  { value: 'Multiple choice' },
+  { value: 'Checkboxes' },
+  { value: 'Drop-down' },
+  { value: 'Date' },
+  { value: 'Time' },
+  { value: 'File upload' },
 ];
 
-const Question: React.FC<any> = ({
-  index,
-  onDelete,
-  onCopy,
-  isEditable,
-  isShow,
-}) => {
+const Question: React.FC<TQuestionProps> = ({ index, onDelete, onCopy, isEditable, isShow }) => {
   const { control, watch, unregister } = useFormContext();
   const currentOption = watch(`questions.${index}.type`);
   const isRequired = watch(`questions.${index}.required]`);
 
   return (
     <>
-      {isEditable && <Dependence index={index} isEditable={isEditable} />}
+      {isEditable && <Dependence index={index} />}
       <Flex
         style={{
           marginBottom: 10,
           gap: isEditable ? 10 : 0,
-          display: "flex",
-          justifyContent: "start",
+          display: 'flex',
+          justifyContent: 'start',
         }}
       >
         {isRequired && !isEditable && (
-          <Typography style={{ color: "#e0434b", marginTop: 3 }}>*</Typography>
+          <Typography style={{ color: '#e0434b', marginTop: 3 }}>*</Typography>
         )}
         <Controller
           name={`questions.${index}.name`}
@@ -50,7 +45,7 @@ const Question: React.FC<any> = ({
                 placeholder="Question"
                 {...field}
                 disabled={!isEditable}
-                className={isEditable && styles.underline}
+                className={isEditable ? styles.underline : ''}
                 variant="borderless"
               />
             </>
@@ -86,7 +81,7 @@ const Question: React.FC<any> = ({
       />
       {isEditable && (
         <>
-          <Divider style={{ backgroundColor: "#000000" }} dashed />
+          <Divider style={{ backgroundColor: '#000000' }} dashed />
           <QuestionButtons onDelete={onDelete} index={index} onCopy={onCopy} />
         </>
       )}

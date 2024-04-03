@@ -1,19 +1,20 @@
-import { XYCoord, useDrag, useDrop } from "react-dnd";
-import { TDragQuestion, TQuestion } from "../components/Question/types/types";
+import { XYCoord, useDrag, useDrop } from 'react-dnd';
+import { TDragQuestion, TQuestion } from '../components/Question/types/types';
+import { FieldValues, UseFieldArrayMove, UseFormWatch } from 'react-hook-form';
 
-export default function DragAndDrop(
-  watch: Function,
+const DragAndDrop = (
+  watch: UseFormWatch<FieldValues>,
   id: string,
   index: number,
-  onMove: Function,
+  onMove: UseFieldArrayMove,
   ref: React.RefObject<HTMLDivElement>
-) {
-  const type = "question";
+) => {
+  const type = 'question';
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: type,
     item: {
-      type: "item",
+      type: 'item',
       item: watch(`questions[${index}]`),
       id: id,
     },
@@ -25,7 +26,7 @@ export default function DragAndDrop(
   const [, drop] = useDrop(() => ({
     accept: type,
     hover(item: TDragQuestion, monitor) {
-      const questions: TQuestion[] = watch("fields");
+      const questions: TQuestion[] = watch('fields');
       if (!ref.current) {
         return;
       }
@@ -45,19 +46,13 @@ export default function DragAndDrop(
       const clientOffset = monitor.getClientOffset();
 
       // Dragging downwards
-      if (
-        dragIndex < hoverIndex &&
-        (clientOffset as XYCoord).y > hoverBoundingRect.bottom - 10
-      ) {
+      if (dragIndex < hoverIndex && (clientOffset as XYCoord).y > hoverBoundingRect.bottom - 10) {
         hoverIndex !== -1 && onMove(dragIndex, hoverIndex);
         return;
       }
 
       // Dragging upwards
-      if (
-        dragIndex > hoverIndex &&
-        (clientOffset as XYCoord).y < hoverBoundingRect.top + 10
-      ) {
+      if (dragIndex > hoverIndex && (clientOffset as XYCoord).y < hoverBoundingRect.top + 10) {
         hoverIndex !== -1 && onMove(dragIndex, hoverIndex);
         return;
       }
@@ -67,4 +62,6 @@ export default function DragAndDrop(
   }));
 
   return { drop, drag, isDragging };
-}
+};
+
+export default DragAndDrop;

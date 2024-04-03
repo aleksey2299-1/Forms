@@ -1,13 +1,13 @@
-import { CloseOutlined } from "@ant-design/icons";
-import { Button, Flex, Input, Select, Tooltip, Typography } from "antd";
-import { useEffect, useState } from "react";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import styles from "./DropDown.module.scss";
-import { TOption } from "../QuestionOption/types/types";
-import { useLocation } from "react-router-dom";
-import { ErrorMessage } from "@hookform/error-message";
+import { CloseOutlined } from '@ant-design/icons';
+import { Button, Flex, Input, Select, Tooltip, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import styles from './DropDown.module.scss';
+import { TOption, TOptionsProps } from '../QuestionOption/types/types';
+import { useLocation } from 'react-router-dom';
+import { ErrorMessage } from '@hookform/error-message';
 
-const DropDown: React.FC<any> = ({ index, isEditable, isRequired }) => {
+const DropDown: React.FC<TOptionsProps> = ({ index, isEditable, isRequired }) => {
   const {
     control,
     watch,
@@ -26,13 +26,13 @@ const DropDown: React.FC<any> = ({ index, isEditable, isRequired }) => {
     if (isEditable) {
       const currentValue = watch(`questions.${index}.options`);
       if (currentValue.length === 0) {
-        append({ option: "Option 1" });
+        append({ option: 'Option 1' });
       }
     }
-  }, [remove]);
+  }, [append, index, isEditable, watch]);
 
   useEffect(() => {
-    const isFormFilled = location.state?.type === "sub2";
+    const isFormFilled = location.state?.type === 'sub2';
     if (isFormFilled) {
       setIsFilled(isFormFilled);
     }
@@ -49,10 +49,7 @@ const DropDown: React.FC<any> = ({ index, isEditable, isRequired }) => {
               control={control}
               defaultValue={`Option ${optionIndex + 1}`}
               render={({ field }) => (
-                <li
-                  key={optionIndex}
-                  style={{ marginBottom: 5, paddingLeft: 7 }}
-                >
+                <li key={optionIndex} style={{ marginBottom: 5, paddingLeft: 7 }}>
                   <Flex vertical={false} justify="space-between">
                     <Input
                       style={{ width: 200 }}
@@ -78,7 +75,7 @@ const DropDown: React.FC<any> = ({ index, isEditable, isRequired }) => {
           <li style={{ paddingLeft: 7 }}>
             <Input
               placeholder={`Option ${fields.length + 1}`}
-              style={{ width: 200, display: "flex", cursor: "text" }}
+              style={{ width: 200, display: 'flex', cursor: 'text' }}
               onClick={() => append({ option: `Option ${fields.length + 1}` })}
               onFocus={(e) => {
                 e.target.blur();
@@ -96,7 +93,7 @@ const DropDown: React.FC<any> = ({ index, isEditable, isRequired }) => {
             rules={{
               required: {
                 value: isRequired,
-                message: "This is a required question",
+                message: 'This is a required question',
               },
             }}
             render={({ field }) => (
@@ -106,7 +103,7 @@ const DropDown: React.FC<any> = ({ index, isEditable, isRequired }) => {
                   value: e.option,
                   label: e.option,
                 }))}
-                style={{ width: 200, display: "flex" }}
+                style={{ width: 200, display: 'flex' }}
                 allowClear
                 {...field}
                 value={!isFilled ? field.value : answers}
@@ -117,9 +114,7 @@ const DropDown: React.FC<any> = ({ index, isEditable, isRequired }) => {
             errors={errors}
             name={`questions.${index}.answers.0`}
             render={({ message }) => (
-              <Typography style={{ display: "flex", color: "#e0434b" }}>
-                {message}
-              </Typography>
+              <Typography style={{ display: 'flex', color: '#e0434b' }}>{message}</Typography>
             )}
           />
         </>

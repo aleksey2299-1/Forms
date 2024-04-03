@@ -1,15 +1,10 @@
-import React, { useEffect } from "react";
-import { Button, Modal } from "antd";
-import { postEditForm } from "./api/FormApi";
-import { useAppDispatch } from "../store/hooks";
+import React, { useEffect } from 'react';
+import { Button, Modal } from 'antd';
+import { postEditForm } from '../../utils/api/FormApi';
+import { useAppDispatch } from '../../store/hooks';
+import { TAppModalProps } from './types/types';
 
-const AppModal: React.FC<any> = ({
-  title,
-  data,
-  isOpen,
-  onClose,
-  setIsRequested,
-}) => {
+const AppModal: React.FC<TAppModalProps> = ({ title, data, isOpen, onClose, setIsRequested }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -17,13 +12,13 @@ const AppModal: React.FC<any> = ({
   }, [isOpen]);
 
   const handleYes = () => {
-    data["active"] = true;
+    data['active'] = true;
     dispatch(postEditForm(data));
     onClose(false);
     setIsRequested(true);
   };
   const handleNo = () => {
-    data["active"] = false;
+    data['active'] = false;
     dispatch(postEditForm(data));
     onClose(false);
     setIsRequested(true);

@@ -1,12 +1,13 @@
-import { CloseOutlined } from "@ant-design/icons";
-import { Button, Radio, Flex, Input, Tooltip, Typography } from "antd";
-import { useEffect, useState } from "react";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import styles from "./MultipleChoice.module.scss";
-import { useLocation } from "react-router-dom";
-import { ErrorMessage } from "@hookform/error-message";
+import { CloseOutlined } from '@ant-design/icons';
+import { Button, Radio, Flex, Input, Tooltip, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import styles from './MultipleChoice.module.scss';
+import { useLocation } from 'react-router-dom';
+import { ErrorMessage } from '@hookform/error-message';
+import { TOptionsProps } from '../QuestionOption/types/types';
 
-const MultipleChoice: React.FC<any> = ({ index, isEditable, isRequired }) => {
+const MultipleChoice: React.FC<TOptionsProps> = ({ index, isEditable, isRequired }) => {
   const {
     control,
     watch,
@@ -24,13 +25,13 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable, isRequired }) => {
     if (isEditable) {
       const currentValue = watch(`questions.${index}.options`);
       if (currentValue.length === 0) {
-        append({ option: "Option 1" });
+        append({ option: 'Option 1' });
       }
     }
-  }, [remove]);
+  }, [append, index, isEditable, watch]);
 
   useEffect(() => {
-    const isFormFilled = location.state?.type === "sub2";
+    const isFormFilled = location.state?.type === 'sub2';
     if (isFormFilled) {
       setIsFilled(isFormFilled);
     }
@@ -40,22 +41,18 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable, isRequired }) => {
     <Controller
       name={`questions.${index}.answers.0`}
       rules={{
-        required: { value: isRequired, message: "This is a required question" },
+        required: { value: isRequired, message: 'This is a required question' },
       }}
       control={control}
       render={({ field }) => (
         <Radio.Group
-          style={{ display: "contents" }}
+          style={{ display: 'contents' }}
           {...field}
           disabled={isEditable}
           value={!isFilled ? field.value : answers}
         >
           {fields.map((item: any, optionIndex) => (
-            <Flex
-              key={item.id}
-              justify="space-between"
-              style={{ marginBottom: 5 }}
-            >
+            <Flex key={item.id} justify="space-between" style={{ marginBottom: 5 }}>
               <Radio defaultChecked={false} value={item.option}>
                 <Controller
                   name={`questions.${index}.options.${optionIndex}.option`}
@@ -65,7 +62,7 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable, isRequired }) => {
                     <Input
                       style={{ width: 200 }}
                       {...field}
-                      className={isEditable && styles.underline}
+                      className={isEditable ? styles.underline : ''}
                       disabled={!isEditable || isFilled}
                       variant="borderless"
                     />
@@ -85,17 +82,11 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable, isRequired }) => {
             </Flex>
           ))}
           {isEditable && !isFilled && (
-            <Radio
-              style={{ display: "flex", marginBottom: 5 }}
-              disabled
-              checked={false}
-            >
+            <Radio style={{ display: 'flex', marginBottom: 5 }} disabled checked={false}>
               <Input
                 placeholder={`Option ${fields.length + 1}`}
-                style={{ width: 200, display: "flex" }}
-                onClick={() =>
-                  append({ option: `Option ${fields.length + 1}` })
-                }
+                style={{ width: 200, display: 'flex' }}
+                onClick={() => append({ option: `Option ${fields.length + 1}` })}
                 variant="borderless"
                 className={styles.underline}
                 onFocus={(e) => {
@@ -108,9 +99,7 @@ const MultipleChoice: React.FC<any> = ({ index, isEditable, isRequired }) => {
             errors={errors}
             name={`questions.${index}.answers.0`}
             render={({ message }) => (
-              <Typography style={{ display: "flex", color: "#e0434b" }}>
-                {message}
-              </Typography>
+              <Typography style={{ display: 'flex', color: '#e0434b' }}>{message}</Typography>
             )}
           />
         </Radio.Group>
