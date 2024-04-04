@@ -1,7 +1,9 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Flex, Tooltip } from 'antd';
 import { useContext } from 'react';
-import CardContext from '../../utils/context/card-context';
+
+import CardContext from '@utils/context/card-context';
+
 import { TButtonsBlockProps } from './types/types';
 
 const ButtonsBlock: React.FC<TButtonsBlockProps> = ({ onAdd }) => {

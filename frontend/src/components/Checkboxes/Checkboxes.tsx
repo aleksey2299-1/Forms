@@ -1,11 +1,14 @@
 import { CloseOutlined } from '@ant-design/icons';
+import { ErrorMessage } from '@hookform/error-message';
 import { Button, Checkbox, Flex, Input, Tooltip, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
-import styles from './Checkboxes.module.scss';
+
 import { useLocation } from 'react-router-dom';
-import { ErrorMessage } from '@hookform/error-message';
-import { TOptionsProps } from '../QuestionOption/types/types';
+
+import { TOptionsProps } from '@components/QuestionOption/types/types';
+
+import styles from './Checkboxes.module.scss';
 
 const Checkboxes: React.FC<TOptionsProps> = ({ index, isEditable, isRequired }) => {
   const {

@@ -1,6 +1,7 @@
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Divider, Flex, Switch, Tooltip } from 'antd';
 import { Controller, useFormContext } from 'react-hook-form';
+
 import { TQuestionButtonsProps } from './types/types';
 
 const QuestionButtons: React.FC<TQuestionButtonsProps> = ({ onDelete, index, onCopy }) => {

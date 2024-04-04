@@ -1,35 +1,39 @@
-import { createBrowserRouter } from "react-router-dom";
-import Admin from "../Admin/Admin";
-import LoginPage from "../Login/Login";
-import FormForFill from "../FormForFill/FormForFill";
-import { fetchActiveFormData } from "../../utils/api/FormApi";
-import { adminLoader } from "../../utils/loaders/AdminLoader";
-import ErrorPage from "../ErrorPage/ErrorPage";
+import { createBrowserRouter } from 'react-router-dom';
+
+import { fetchActiveFormData } from '@utils/api/FormApi';
+
+import { adminLoader } from '@utils/loaders/AdminLoader';
+
+import Admin from '../Admin/Admin';
+import ErrorPage from '../ErrorPage/ErrorPage';
+import FormForFill from '../FormForFill/FormForFill';
+import LoginPage from '../Login/Login';
+
 
 const router = createBrowserRouter([
   {
-    path: "forms",
+    path: 'forms',
     element: <Admin />,
     loader: adminLoader,
     children: [
       {
-        path: "/forms/:formId",
+        path: '/forms/:formId',
         element: <Admin />,
         loader: adminLoader,
       },
       {
-        path: "/forms/filled-forms/:formId",
+        path: '/forms/filled-forms/:formId',
         element: <Admin />,
         loader: adminLoader,
       },
     ],
   },
   {
-    path: "/login/",
+    path: '/login/',
     element: <LoginPage />,
   },
   {
-    path: "/",
+    path: '/',
     element: <FormForFill />,
     loader: fetchActiveFormData,
     errorElement: <ErrorPage />,

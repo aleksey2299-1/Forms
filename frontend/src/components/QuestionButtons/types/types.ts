@@ -1,5 +1,6 @@
 import { UseFieldArrayInsert } from 'react-hook-form';
-import { TForm } from 'src/components/EditForm/types/types';
+
+import { TForm } from '@components/EditForm/types/types';
 
 type TQuestionButtonsProps = {
   index: number;

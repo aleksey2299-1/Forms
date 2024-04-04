@@ -1,8 +1,11 @@
-import axios, { AxiosError } from 'axios';
-import { TFormFill } from '../../pages/FormForFill/types/types';
-import { TForm } from '../../components/EditForm/types/types';
-import { BASE_URL } from '../constants/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios, { AxiosError } from 'axios';
+
+
+import { TForm } from '@components/EditForm/types/types';
+import { TFormFill } from '@pages/FormForFill/types/types';
+
+import { BASE_URL } from '../constants/constants';
 
 export const getAllEditForms = createAsyncThunk(
   'editForms/getAllEditForms',

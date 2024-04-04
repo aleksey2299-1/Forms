@@ -1,11 +1,14 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Button, Radio, Flex, Input, Tooltip, Typography } from 'antd';
+import { ErrorMessage } from '@hookform/error-message';
+import { Button, Flex, Input, Radio, Tooltip, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
-import styles from './MultipleChoice.module.scss';
+
 import { useLocation } from 'react-router-dom';
-import { ErrorMessage } from '@hookform/error-message';
+
 import { TOptionsProps } from '../QuestionOption/types/types';
+
+import styles from './MultipleChoice.module.scss';
 
 const MultipleChoice: React.FC<TOptionsProps> = ({ index, isEditable, isRequired }) => {
   const {

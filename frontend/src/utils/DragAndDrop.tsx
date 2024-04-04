@@ -1,6 +1,8 @@
 import { XYCoord, useDrag, useDrop } from 'react-dnd';
-import { TDragQuestion, TQuestion } from '../components/Question/types/types';
+
 import { FieldValues, UseFieldArrayMove, UseFormWatch } from 'react-hook-form';
+
+import { TDragQuestion, TQuestion } from '@components/Question/types/types';
 
 const DragAndDrop = (
   watch: UseFormWatch<FieldValues>,

@@ -1,15 +1,20 @@
-import { Button, ConfigProvider, Layout } from 'antd';
-import styles from './FormForFill.module.scss';
-import { Controller, FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { CheckOutlined } from '@ant-design/icons';
+import { Button, ConfigProvider, Layout } from 'antd';
+
 import { useEffect, useState } from 'react';
-import CardBlock from 'src/components/CardBlock/CardBlock';
-import { TFormFill } from './types/types';
+import { Controller, FieldValues, FormProvider, useForm } from 'react-hook-form';
+
 import { useLoaderData, useLocation } from 'react-router-dom';
-import { postFilledForm } from 'src/utils/api/FormApi';
-import { useAppDispatch, useAppSelector } from 'src/store/hooks';
-import { selectFilledForms } from 'src/store/reducers/filledForms/filledFormsSlice';
-import RequestModal from 'src/components/RequestModal/RequestModal';
+
+import CardBlock from '@components/CardBlock/CardBlock';
+import RequestModal from '@components/RequestModal/RequestModal';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { selectFilledForms } from '@store/reducers/filledForms/filledFormsSlice';
+import { postFilledForm } from '@utils/api/FormApi';
+
+import styles from './FormForFill.module.scss';
+import { TFormFill } from './types/types';
+
 
 const FormForFill: React.FC = () => {
   const methods = useForm();

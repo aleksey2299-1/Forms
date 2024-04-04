@@ -1,15 +1,19 @@
-import { Card, Input } from 'antd';
-import styles from './CardBlock.module.scss';
-import Question from '../Question/Question';
-import { Controller, UseFieldArrayInsert, useFormContext } from 'react-hook-form';
-import { useEffect, useRef, useState } from 'react';
 import { DragOutlined } from '@ant-design/icons';
-import DragAndDrop from '../../utils/DragAndDrop';
-import { TQuestion } from '../Question/types/types';
+import { Card, Input } from 'antd';
+
+import { useEffect, useRef, useState } from 'react';
+import { Controller, UseFieldArrayInsert, useFormContext } from 'react-hook-form';
+
 import { useLocation } from 'react-router-dom';
+
+import { TDependence } from '@components/Dependence/types/types';
+import { TForm } from '@components/EditForm/types/types';
+import Question from '@components/Question/Question';
+import { TQuestion } from '@components/Question/types/types';
+import DragAndDrop from '@utils/DragAndDrop';
+
+import styles from './CardBlock.module.scss';
 import { TCardBlockProps } from './types/types';
-import { TDependence } from '../Dependence/types/types';
-import { TForm } from '../EditForm/types/types';
 
 const CardBlock: React.FC<TCardBlockProps> = ({
   isTitle,
@@ -52,7 +56,7 @@ const CardBlock: React.FC<TCardBlockProps> = ({
   let dragAndDropFunctions = null;
 
   if (isEditable) {
-    //@ts-expect-error жалуется что значения моугт быть undefined, хотя при isEditable они точно будут
+    //@ts-expect-error жалуется что значения могут быть undefined, хотя при isEditable они точно будут
     dragAndDropFunctions = DragAndDrop(watch, id, index, onMove, ref);
     dragAndDropFunctions.drop(ref);
   }

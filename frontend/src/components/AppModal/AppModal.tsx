@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
 import { Button, Modal } from 'antd';
-import { postEditForm } from '../../utils/api/FormApi';
-import { useAppDispatch } from '../../store/hooks';
+import { useEffect } from 'react';
+
+import { useAppDispatch } from '@store/hooks';
+import { postEditForm } from '@utils/api/FormApi';
+
 import { TAppModalProps } from './types/types';
 
 const AppModal: React.FC<TAppModalProps> = ({ title, data, isOpen, onClose, setIsRequested }) => {

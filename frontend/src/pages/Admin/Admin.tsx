@@ -1,10 +1,14 @@
 import { Button, ConfigProvider, Layout } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Header } from 'antd/es/layout/layout';
-import AppMenu from '../../components/AppMenu/AppMenu';
-import EditForm from '../../components/EditForm/EditForm';
-import { useLocation, useNavigate } from 'react-router-dom';
+
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+
+import AppMenu from '@components/AppMenu/AppMenu';
+import EditForm from '@components/EditForm/EditForm';
+
 import FormForFill from '../FormForFill/FormForFill';
 
 const Admin: React.FC = () => {
@@ -46,7 +50,7 @@ const Admin: React.FC = () => {
         >
           <AppMenu />
         </Sider>
-        {isEditable && <EditForm />}
+        {isEditable && <EditForm key={location.state?.key || 'initial'} />}
         {!isEditable && (
           <ConfigProvider
             componentDisabled

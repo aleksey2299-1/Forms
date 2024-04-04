@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { postEditForm, postFilledForm } from "../../../utils/api/FormApi";
+import { createSlice } from '@reduxjs/toolkit';
+
+import { postEditForm, postFilledForm } from '@utils/api/FormApi';
 
 export interface RequestState {
   isLoading: boolean;
@@ -12,7 +13,7 @@ const initialState: RequestState = {
 };
 
 const requestSlice = createSlice({
-  name: "request",
+  name: 'request',
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -42,7 +43,6 @@ const requestSlice = createSlice({
   },
 });
 
-export const selectRequest = (state: { request: RequestState }) =>
-  state.request;
+export const selectRequest = (state: { request: RequestState }) => state.request;
 
 export default requestSlice.reducer;

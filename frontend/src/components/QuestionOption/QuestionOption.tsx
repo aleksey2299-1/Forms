@@ -1,13 +1,18 @@
-import { DatePicker, Input, TimePicker, Typography } from 'antd';
-import DropDown from '../DropDown/DropDown';
-import Checkboxes from '../Checkboxes/Checkboxes';
-import MultipleChoice from '../MultipleChoice/MultipleChoice';
-import { Controller, useFormContext } from 'react-hook-form';
-import styles from './QuestionOption.module.scss';
-import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import { ErrorMessage } from '@hookform/error-message';
+import { DatePicker, Input, TimePicker, Typography } from 'antd';
+
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+
+import { useLocation } from 'react-router-dom';
+
+import Checkboxes from '@components/Checkboxes/Checkboxes';
+import DropDown from '@components/DropDown/DropDown';
+import MultipleChoice from '@components/MultipleChoice/MultipleChoice';
+
+import styles from './QuestionOption.module.scss';
+
 import { TQuestionOptionProps } from './types/types';
 
 const QuestionOption: React.FC<TQuestionOptionProps> = ({

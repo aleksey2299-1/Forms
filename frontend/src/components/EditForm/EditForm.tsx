@@ -1,19 +1,25 @@
-import { Button, Layout, Spin } from 'antd';
-import styles from './EditForm.module.scss';
-import CardBlock from '../../components/CardBlock/CardBlock';
-import { Controller, FieldValues, FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import ButtonsBlock from '../../components/ButtonsBlock/ButtonsBlock';
+
+
 import { CheckOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Button, Layout, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { TQuestion } from '../../components/Question/types/types';
+
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import AppModal from '../AppModal/AppModal';
+import { Controller, FieldValues, FormProvider, useFieldArray, useForm } from 'react-hook-form';
+
 import { useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../store/hooks';
-import { selectForms } from '../../store/reducers/forms/formsSlice';
-import RequestModal from '../RequestModal/RequestModal';
-import CardContext from '../../utils/context/card-context';
+
+import AppModal from '@components/AppModal/AppModal';
+import ButtonsBlock from '@components/ButtonsBlock/ButtonsBlock';
+import CardBlock from '@components/CardBlock/CardBlock';
+import { TQuestion } from '@components/Question/types/types';
+import RequestModal from '@components/RequestModal/RequestModal';
+import { useAppSelector } from '@store/hooks';
+import { selectForms } from '@store/reducers/forms/formsSlice';
+import CardContext from '@utils/context/card-context';
+
+import styles from './EditForm.module.scss';
 import { TForm } from './types/types';
 
 const EditForm: React.FC = () => {
@@ -49,8 +55,6 @@ const EditForm: React.FC = () => {
           });
         }
       }
-    } else {
-      methods.reset();
     }
   }, [location, methods, forms]);
 

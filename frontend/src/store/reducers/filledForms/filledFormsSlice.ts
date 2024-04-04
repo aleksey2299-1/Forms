@@ -1,9 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {
-  getAllFilledForms,
-  getFilledFormById,
-} from "../../../utils/api/FormApi";
-import { TFormFill } from "../../../pages/FormForFill/types/types";
+import { createSlice } from '@reduxjs/toolkit';
+
+import { TFormFill } from '@pages/FormForFill/types/types';
+import { getAllFilledForms, getFilledFormById } from '@utils/api/FormApi';
 
 export interface FormsState {
   forms: TFormFill[];
@@ -20,7 +18,7 @@ const initialState: FormsState = {
 };
 
 const filledFormsSlice = createSlice({
-  name: "filledForms",
+  name: 'filledForms',
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -52,7 +50,6 @@ const filledFormsSlice = createSlice({
   },
 });
 
-export const selectFilledForms = (state: { filledForms: FormsState }) =>
-  state.filledForms;
+export const selectFilledForms = (state: { filledForms: FormsState }) => state.filledForms;
 
 export default filledFormsSlice.reducer;

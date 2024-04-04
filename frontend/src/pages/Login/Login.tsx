@@ -1,9 +1,13 @@
 import { Button, Card, Flex, Input, Layout, Typography } from 'antd';
-import { Controller, FieldValues, FormProvider, useForm } from 'react-hook-form';
-import { fetchTokenData } from '../../utils/api/AuthApi';
-import { TUser } from './types/types';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { Controller, FieldValues, FormProvider, useForm } from 'react-hook-form';
+
+import { useNavigate } from 'react-router-dom';
+
+
+import { fetchTokenData } from '@utils/api/AuthApi';
+
+import { TUser } from './types/types';
 
 const LoginPage: React.FC = () => {
   const methods = useForm();

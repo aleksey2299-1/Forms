@@ -1,8 +1,11 @@
-import { Input, Divider, Flex, Select, Typography } from 'antd';
-import QuestionOption from '../QuestionOption/QuestionOption';
-import QuestionButtons from '../QuestionButtons/QuestionButtons';
+import { Divider, Flex, Input, Select, Typography } from 'antd';
+
 import { Controller, useFormContext } from 'react-hook-form';
+
 import Dependence from '../Dependence/Dependence';
+import QuestionButtons from '../QuestionButtons/QuestionButtons';
+import QuestionOption from '../QuestionOption/QuestionOption';
+
 import styles from './Question.module.scss';
 import { TQuestionProps } from './types/types';
 

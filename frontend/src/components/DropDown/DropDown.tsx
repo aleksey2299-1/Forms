@@ -1,11 +1,14 @@
 import { CloseOutlined } from '@ant-design/icons';
+import { ErrorMessage } from '@hookform/error-message';
 import { Button, Flex, Input, Select, Tooltip, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
-import styles from './DropDown.module.scss';
-import { TOption, TOptionsProps } from '../QuestionOption/types/types';
+
 import { useLocation } from 'react-router-dom';
-import { ErrorMessage } from '@hookform/error-message';
+
+import { TOption, TOptionsProps } from '@components/QuestionOption/types/types';
+
+import styles from './DropDown.module.scss';
 
 const DropDown: React.FC<TOptionsProps> = ({ index, isEditable, isRequired }) => {
   const {

@@ -1,7 +1,9 @@
 import { UseFieldArrayInsert } from 'react-hook-form';
-import { TDependence } from '../../Dependence/types/types';
-import { TOption } from '../../QuestionOption/types/types';
-import { TForm } from 'src/components/EditForm/types/types';
+
+import { TDependence } from '@components/Dependence/types/types';
+import { TForm } from '@components/EditForm/types/types';
+
+import { TOption } from '@components/QuestionOption/types/types';
 
 type TQuestionProps = {
   index: number;

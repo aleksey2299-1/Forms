@@ -1,7 +1,10 @@
 import { Divider, Flex, Select, Typography } from 'antd';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
-import { TQuestion } from '../Question/types/types';
 import { useEffect } from 'react';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
+
+
+import { TQuestion } from '@components/Question/types/types';
+
 import { TDependenceProps } from './types/types';
 
 const dependsTypes = ['Multiple choice', 'Checkboxes', 'Drop-down'];

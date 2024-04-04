@@ -1,7 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { TForm } from "../../../components/EditForm/types/types";
-import { initialForm } from "./constants";
-import { getAllEditForms, getEditFormById } from "../../../utils/api/FormApi";
+import { createSlice } from '@reduxjs/toolkit';
+
+import { TForm } from '@components/EditForm/types/types';
+
+import { getAllEditForms, getEditFormById } from '@utils/api/FormApi';
+
+import { initialForm } from './constants';
 
 export interface FormsState {
   forms: TForm[];
@@ -18,7 +21,7 @@ const initialState: FormsState = {
 };
 
 const formsSlice = createSlice({
-  name: "forms",
+  name: 'forms',
   initialState,
   reducers: {},
   extraReducers(builder) {

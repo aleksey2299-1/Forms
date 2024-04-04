@@ -1,4 +1,4 @@
-import { TFormFill } from "../../../pages/FormForFill/types/types";
+import { TFormFill } from '@pages/FormForFill/types/types';
 
 type TAdminLoader = {
   forms: TFormFill[];

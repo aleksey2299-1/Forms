@@ -1,4 +1,4 @@
-import { TForm } from 'src/components/EditForm/types/types';
+import { TForm } from '@components/EditForm/types/types';
 
 type TAppModalProps = {
   title: string;

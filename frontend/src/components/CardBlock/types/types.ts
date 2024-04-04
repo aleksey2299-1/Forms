@@ -1,5 +1,6 @@
 import { UseFieldArrayInsert, UseFieldArrayMove } from 'react-hook-form';
-import { TForm } from 'src/components/EditForm/types/types';
+
+import { TForm } from '@components/EditForm/types/types';
 
 type TCardBlockProps = {
   isTitle?: boolean;

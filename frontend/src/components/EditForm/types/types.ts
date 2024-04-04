@@ -1,4 +1,4 @@
-import { TQuestion } from "../../../components/Question/types/types";
+import { TQuestion } from '@components/Question/types/types';
 
 type TForm = {
   id: number;
