@@ -99,7 +99,7 @@ sudo sh ./get-docker.sh
 sudo apt install docker-compose-plugin 
 ````
 
-Запустить Docker в директории с файлом **docker-compose.yaml** (чтобы запустить в фоновом режиме добавьте флаг -d):
+Запустить Docker в директории с файлом **docker-compose.production.yml** (чтобы запустить в фоновом режиме добавьте флаг -d):
 ````bash
 docker compose -f docker-compose.production.yml up
 ````
